@@ -1,14 +1,69 @@
+using System.Net.Mime;
 using BackendPlatform.API.Shared.Infrastructure.Persistence.EntityFrameworkCore.Configuration;
 using BackendPlatform.API.Shared.Interfaces.ASP.Configuration;
 using Microsoft.EntityFrameworkCore;
+using BackendPlatform.API.Resources;
+using BackendPlatform.API.Shared.Domain.Repositories;
+using BackendPlatform.API.Shared.Infrastructure.Persistence.EntityFrameworkCore.Repositories;
+using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
+using Microsoft.Extensions.Localization;
+using Scalar.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
+
+// Configure Lower Case URLs
+builder.Services.AddRouting(options => options.LowercaseUrls = true);
 
 // Localization Configuration
 builder.Services.AddLocalization();
 
 //Configure Kebab Case Naming Convention for Controllers
-builder.Services.AddControllers(options => options.Conventions.Add(new KebabCaseRouteNamingConvention()));
+builder.Services.AddControllers(options => options.Conventions.Add(new KebabCaseRouteNamingConvention()))
+    .AddDataAnnotationsLocalization(options => 
+        options.DataAnnotationLocalizerProvider = (_, factory) => factory.Create(typeof(SharedResource)))
+    .ConfigureApiBehaviorOptions(options =>
+    {
+        options.InvalidModelStateResponseFactory = context =>
+        {
+            var localizer = context.HttpContext.RequestServices
+                .GetRequiredService<IStringLocalizer<SharedResource>>();
+            var problemDetailsFactory = context.HttpContext.RequestServices
+                .GetRequiredService<ProblemDetailsFactory>();
+            var problemDetails = problemDetailsFactory.CreateValidationProblemDetails(
+                context.HttpContext,
+                context.ModelState,
+                statusCode: StatusCodes.Status400BadRequest,
+                title: localizer["InvalidModelStateTitle"].Value);
+
+            var result = new BadRequestObjectResult(problemDetails);
+            result.ContentTypes.Add(MediaTypeNames.Application.Json);
+            return result;
+        };
+    });
+
+// Register RFC 7807 ProblemDetails Payloads for centralized exception handling and error reporting
+builder.Services.AddProblemDetails(options =>
+{
+    options.CustomizeProblemDetails = context =>
+    {
+        if (context.ProblemDetails.Status is null or >= 500)
+        {
+            var localizer = context.HttpContext.RequestServices
+                .GetRequiredService<IStringLocalizer<SharedResource>>();
+            context.ProblemDetails.Title = localizer["UnexpectedServerError"].Value;
+            context.ProblemDetails.Detail = localizer["UnexpectedErrorProcessingRequest"].Value;
+        }
+    };
+});
+
+// Generate the OpenAPI document with ASP.NET Core's built-in support
+/*builder.Services.AddOpenApi(options =>
+{
+    options.AddOperationTransformer(LocalizedOpenApiAssembler.TransformOperationAsync);
+    options.AddSchemaTransformer(LocalizedOpenApiAssembler.TransformSchemaAsync);
+});*/
 
 // Add Database Connection
 
@@ -29,11 +84,24 @@ builder.Services.AddDbContext<AppDbContext>((serviceProvider, options) =>
 
     if (builder.Environment.IsDevelopment())
         options.EnableSensitiveDataLogging();
-}); 
+});
+
+// Configure Dependency Injection
+
+// Shared bounded context Injection Configuration
+builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
 var app = builder.Build();
 
-app.MapGet("/", () => "Hello World!");
+using (var scope = app.Services.CreateScope())
+{
+    var services = scope.ServiceProvider;
+    var context = services.GetRequiredService<AppDbContext>();
+    context.Database.Migrate();
+}
+
+// Configure the HTTP request pipeline.
+app.UseExceptionHandler();
 
 //Localization Configuration
 var supportedCultures = new[] { "en", "en-US", "es", "es-PE" };
@@ -43,5 +111,14 @@ var localizationOptions = new RequestLocalizationOptions()
     .AddSupportedUICultures(supportedCultures);
 localizationOptions.ApplyCurrentCultureToResponseHeaders = true;
 app.UseRequestLocalization(localizationOptions);
+
+app.UseHttpsRedirection();
+
+//app.UseAuthorization();
+
+// OpenAPI and Scalar are kept available in all environments to preserve the existing API explorer behavior.
+app.MapOpenApi();
+app.MapScalarApiReference();
+app.MapControllers();
 
 app.Run();
