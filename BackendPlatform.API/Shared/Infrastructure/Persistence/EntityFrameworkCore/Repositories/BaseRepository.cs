@@ -4,6 +4,16 @@ using Microsoft.EntityFrameworkCore;
 
 namespace BackendPlatform.API.Shared.Infrastructure.Persistence.EntityFrameworkCore.Repositories;
 
+/// <summary>
+///     Generic base repository providing CRUD operations for all entity types.
+/// </summary>
+/// <remarks>
+///     This generic repository implements the IBaseRepository contract and provides
+///     common CRUD operations against an EF Core DbContext. Derived repositories
+///     can extend this class to add entity-specific query methods.
+/// </remarks>
+/// <typeparam name="TEntity">The entity type that this repository manages.</typeparam>
+/// <param name="context">The EF Core database context.</param>
 public class BaseRepository<TEntity>(AppDbContext context) : IBaseRepository<TEntity> where TEntity : class
 {
     /// <summary>
