@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace BackendPlatform.API.UserProfileManagement.Domain.Model;
+namespace BackendPlatform.API.UserProfileManagement.Domain.Model.Entities;
 
 public class Goal
 {
