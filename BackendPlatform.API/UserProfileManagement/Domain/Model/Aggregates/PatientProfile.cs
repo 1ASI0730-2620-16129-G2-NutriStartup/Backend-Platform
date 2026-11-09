@@ -10,10 +10,7 @@ public class PatientProfile
     public string UserId { get; set; } = string.Empty;
     
     [Required, MaxLength(80)]
-    public string FirstName { get; set; } = string.Empty;
-    
-    [Required, MaxLength(80)]
-    public string LastName { get; set; } = string.Empty;
+    public string Name { get; set; } = string.Empty;
     
     [Range(1, 110)]
     public int Age { get; set; }
