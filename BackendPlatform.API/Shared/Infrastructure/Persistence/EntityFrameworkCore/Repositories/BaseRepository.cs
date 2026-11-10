@@ -5,49 +5,70 @@ using Microsoft.EntityFrameworkCore;
 namespace BackendPlatform.API.Shared.Infrastructure.Persistence.EntityFrameworkCore.Repositories;
 
 /// <summary>
-///     Generic base repository providing CRUD operations for all entity types.
+///     Base repository for all repositories
 /// </summary>
 /// <remarks>
-///     This generic repository implements the IBaseRepository contract and provides
-///     common CRUD operations against an EF Core DbContext. Derived repositories
-///     can extend this class to add entity-specific query methods.
+///     This class is used to define the basic CRUD operations for all repositories.
+///     This class implements the IBaseRepository interface.
 /// </remarks>
-/// <typeparam name="TEntity">The entity type that this repository manages.</typeparam>
-/// <param name="context">The EF Core database context.</param>
-public class BaseRepository<TEntity>(AppDbContext context) : IBaseRepository<TEntity> where TEntity : class
+/// <typeparam name="TEntity">
+///     The entity type for the repository
+/// </typeparam>
+public class BaseRepository<TEntity> : IBaseRepository<TEntity> where TEntity : class
 {
-    /// <summary>
-    ///     The EF Core <see cref="AppDbContext"/> instance available to derived repositories.
-    /// </summary>
-    protected readonly AppDbContext Context = context;
+    protected readonly AppDbContext Context;
 
-    /// <inheritdoc />
+    /// <summary>
+    ///     Default constructor for the base repository
+    /// </summary>
+    protected BaseRepository(AppDbContext context)
+    {
+        Context = context;
+    }
+
+    // inheritedDoc
     public async Task AddAsync(TEntity entity, CancellationToken cancellationToken = default)
     {
         await Context.Set<TEntity>().AddAsync(entity, cancellationToken);
     }
 
-    /// <inheritdoc />
+    // inheritedDoc
     public async Task<TEntity?> FindByIdAsync(int id, CancellationToken cancellationToken = default)
     {
-        return await Context.Set<TEntity>().FindAsync([id], cancellationToken);
+        return await Context.Set<TEntity>().FindAsync(new object[] { id }, cancellationToken);
     }
 
-    /// <inheritdoc />
+    // inheritedDoc
+    public async Task<TEntity?> FindByIdAsNoTrackingAsync(int id, CancellationToken cancellationToken = default)
+    {
+        return await Context.Set<TEntity>()
+            .AsNoTracking()
+            .FirstOrDefaultAsync(e => EF.Property<int>(e, "Id") == id, cancellationToken);
+    }
+
+    // inheritedDoc
     public void Update(TEntity entity)
     {
         Context.Set<TEntity>().Update(entity);
     }
 
-    /// <inheritdoc />
+    // inheritedDoc
     public void Remove(TEntity entity)
     {
         Context.Set<TEntity>().Remove(entity);
     }
 
-    /// <inheritdoc />
+    // inheritedDoc
     public async Task<IEnumerable<TEntity>> ListAsync(CancellationToken cancellationToken = default)
     {
         return await Context.Set<TEntity>().ToListAsync(cancellationToken);
+    }
+
+    // inheritedDoc
+    public async Task<IEnumerable<TEntity>> ListAsNoTrackingAsync(CancellationToken cancellationToken = default)
+    {
+        return await Context.Set<TEntity>()
+            .AsNoTracking()
+            .ToListAsync(cancellationToken);
     }
 }

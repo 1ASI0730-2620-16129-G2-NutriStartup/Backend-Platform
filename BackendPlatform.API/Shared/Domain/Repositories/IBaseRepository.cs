@@ -43,4 +43,25 @@ public interface IBaseRepository<TEntity>
     /// <param name="cancellationToken">Token to cancel the asynchronous operation.</param>
     /// <returns>An Enumerable containing all entity objects</returns>
     Task<IEnumerable<TEntity>> ListAsync(CancellationToken cancellationToken = default);
+    
+    /// <summary>
+    ///     Find an entity by its id without change tracking
+    /// </summary>
+    /// <param name="id">
+    ///     The id of the entity to find
+    /// </param>
+    /// <param name="cancellationToken">The cancellation token</param>
+    /// <returns>
+    ///     The entity if found, otherwise null
+    /// </returns>
+    Task<TEntity?> FindByIdAsNoTrackingAsync(int id, CancellationToken cancellationToken = default);
+    
+    /// <summary>
+    ///     List all entities in the repository without change tracking
+    /// </summary>
+    /// <param name="cancellationToken">The cancellation token</param>
+    /// <returns>
+    ///     A list of all entities in the repository
+    /// </returns>
+    Task<IEnumerable<TEntity>> ListAsNoTrackingAsync(CancellationToken cancellationToken = default);
 }
