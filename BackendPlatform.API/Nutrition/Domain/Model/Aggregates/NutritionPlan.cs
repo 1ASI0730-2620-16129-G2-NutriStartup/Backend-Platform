@@ -5,7 +5,7 @@ using BackendPlatform.API.Shared.Domain.Model.Aggregates.Internal;
 
 namespace BackendPlatform.API.Nutrition.Domain.Model.Aggregates;
 
-public partial class NutritionPlan : AggregateRoot
+public class NutritionPlan : AggregateRoot
 {
     public NutritionPlan(string name, string description, string objective,
         string startDate, string endDate, NutritionPlanStatus status)
@@ -21,7 +21,8 @@ public partial class NutritionPlan : AggregateRoot
         StartDate = startDate;
         EndDate = endDate;
         Status = status;
-        AddDomainEvent(new NutritionPlanCreatedEvent(Id, name, description, objective, startDate, endDate, status.ToString()));
+        AddDomainEvent(new NutritionPlanCreatedEvent(Id, name, description, objective, startDate, endDate,
+            status.ToString()));
     }
 
     public NutritionPlan(CreateNutritionPlanCommand command) : this(command.Name, command.Description,
