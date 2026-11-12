@@ -1,3 +1,3 @@
 ﻿namespace BackendPlatform.API.Nutrition.Domain.Model.Queries;
 
-public record GetAllNutritionPlans;
+public record GetAllMealPlansQuery;
