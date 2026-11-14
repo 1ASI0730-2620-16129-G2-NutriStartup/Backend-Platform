@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+    <data name="AppointmentBooked" xml:space="preserve">
+    <value>Appointment booked successfully.</value>
+  </data>
+    <data name="AppointmentCancelled" xml:space="preserve">
+    <value>Appointment cancelled successfully.</value>
+  </data>
+    <data name="ConsultationRegistered" xml:space="preserve">
+    <value>Consultation registered successfully.</value>
+  </data>
+</root>
