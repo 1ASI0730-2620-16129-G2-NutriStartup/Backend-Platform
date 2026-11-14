@@ -5,7 +5,7 @@ using BackendPlatform.API.Shared.Domain.Model.Aggregates.Internal;
 
 namespace BackendPlatform.API.Nutrition.Domain.Model.Aggregates;
 
-public class MealPlan : AggregateRoot
+public partial class MealPlan : AggregateRoot
 {
     public MealPlan(NutritionPlanId nutritionPlanId, string mealType, string description, int calories)
     {
