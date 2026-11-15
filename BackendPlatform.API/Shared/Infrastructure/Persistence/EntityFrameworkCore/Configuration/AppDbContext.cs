@@ -1,5 +1,6 @@
 ﻿using BackendPlatform.API.Shared.Infrastructure.Persistence.EntityFrameworkCore.Configuration.Extensions;
 using BackendPlatform.API.Shared.Infrastructure.Persistence.EntityFrameworkCore.Interceptors;
+using BackendPlatform.API.UserProfileManagement.Infrastructure.Persistence.EntityFrameworkCore.Configuration.Extensions;
 using Microsoft.EntityFrameworkCore;
 
 namespace BackendPlatform.API.Shared.Infrastructure.Persistence.EntityFrameworkCore.Configuration;
@@ -22,7 +23,8 @@ public class AppDbContext(DbContextOptions options) : DbContext(options)
     {
         base.OnModelCreating(builder);
         
-        //Aquí agregas las cosas de tu BC
+        //BC
+        builder.ApplyUserProfileManagementConfiguration();
 
         builder.UseSnakeCaseNamingConvention();
     }

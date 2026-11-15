@@ -1,10 +1,17 @@
 using System.Net.Mime;
+using System.Text.Json;
 using BackendPlatform.API.Shared.Infrastructure.Persistence.EntityFrameworkCore.Configuration;
 using BackendPlatform.API.Shared.Interfaces.ASP.Configuration;
 using Microsoft.EntityFrameworkCore;
 using BackendPlatform.API.Resources;
 using BackendPlatform.API.Shared.Domain.Repositories;
 using BackendPlatform.API.Shared.Infrastructure.Persistence.EntityFrameworkCore.Repositories;
+using BackendPlatform.API.UserProfileManagement.Application.CommandServices;
+using BackendPlatform.API.UserProfileManagement.Application.Internal.CommandServices;
+using BackendPlatform.API.UserProfileManagement.Application.Internal.QueryServices;
+using BackendPlatform.API.UserProfileManagement.Application.QueryServices;
+using BackendPlatform.API.UserProfileManagement.Domain.Repositories;
+using BackendPlatform.API.UserProfileManagement.Infrastructure.Persistence.EntityFrameworkCore.Repositories;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
@@ -19,18 +26,24 @@ builder.Services.AddRouting(options => options.LowercaseUrls = true);
 // Localization Configuration
 builder.Services.AddLocalization();
 
+// Open Api Configuration
+builder.Services.AddOpenApi();
+
 //Configure Kebab Case Naming Convention for Controllers
 builder.Services.AddControllers(options => options.Conventions.Add(new KebabCaseRouteNamingConvention()))
+    .AddJsonOptions(options =>
+    {
+        options.JsonSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.SnakeCaseLower;
+        options.JsonSerializerOptions.PropertyNameCaseInsensitive = true;
+    })
     .AddDataAnnotationsLocalization(options => 
         options.DataAnnotationLocalizerProvider = (_, factory) => factory.Create(typeof(SharedResource)))
     .ConfigureApiBehaviorOptions(options =>
     {
         options.InvalidModelStateResponseFactory = context =>
         {
-            var localizer = context.HttpContext.RequestServices
-                .GetRequiredService<IStringLocalizer<SharedResource>>();
-            var problemDetailsFactory = context.HttpContext.RequestServices
-                .GetRequiredService<ProblemDetailsFactory>();
+            var localizer = context.HttpContext.RequestServices.GetRequiredService<IStringLocalizer<SharedResource>>();
+            var problemDetailsFactory = context.HttpContext.RequestServices.GetRequiredService<ProblemDetailsFactory>();
             var problemDetails = problemDetailsFactory.CreateValidationProblemDetails(
                 context.HttpContext,
                 context.ModelState,
@@ -50,8 +63,7 @@ builder.Services.AddProblemDetails(options =>
     {
         if (context.ProblemDetails.Status is null or >= 500)
         {
-            var localizer = context.HttpContext.RequestServices
-                .GetRequiredService<IStringLocalizer<SharedResource>>();
+            var localizer = context.HttpContext.RequestServices.GetRequiredService<IStringLocalizer<SharedResource>>();
             context.ProblemDetails.Title = localizer["UnexpectedServerError"].Value;
             context.ProblemDetails.Detail = localizer["UnexpectedErrorProcessingRequest"].Value;
         }
@@ -90,6 +102,15 @@ builder.Services.AddDbContext<AppDbContext>((serviceProvider, options) =>
 
 // Shared bounded context Injection Configuration
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+
+// User Profile Management
+builder.Services.AddScoped<IPatientProfileRepository, PatientProfileRepository>();
+builder.Services.AddScoped<INutritionistProfileRepository, NutritionistProfileRepository>();
+
+builder.Services.AddScoped<IPatientProfileCommandService, PatientProfileCommandService>();
+builder.Services.AddScoped<INutritionistProfileCommandService, NutritionistProfileCommandService>();
+builder.Services.AddScoped<IPatientProfileQueryService, PatientProfileQueryService>();
+builder.Services.AddScoped<INutritionistProfileQueryService, NutritionistProfileQueryService>();
 
 var app = builder.Build();
 
