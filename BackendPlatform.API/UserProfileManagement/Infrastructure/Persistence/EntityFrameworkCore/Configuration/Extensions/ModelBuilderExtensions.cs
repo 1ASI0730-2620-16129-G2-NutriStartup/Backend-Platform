@@ -54,7 +54,7 @@ public static class ModelBuilderExtensions
 
         builder.Entity<Goal>().Property(c => c.TargetWeight).IsRequired().HasPrecision(5, 2);
 
-        builder.Entity<Goal>().Property(c => c.TargetDate).IsRequired();
+        builder.Entity<Goal>().Property(c => c.TargetDate).HasConversion(dateOnly => dateOnly.ToDateTime(TimeOnly.MinValue), dateTime => DateOnly.FromDateTime(dateTime)).HasColumnType("date").IsRequired();
 
         builder.Entity<Goal>().Property(c => c.Status).IsRequired().HasMaxLength(40);
 
