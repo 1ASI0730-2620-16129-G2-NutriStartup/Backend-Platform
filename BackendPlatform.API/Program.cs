@@ -21,6 +21,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRouting(options => options.LowercaseUrls = true);
 builder.Services.AddScoped<IProgressEntryCommandService, ProgressEntryCommandService>();
 builder.Services.AddScoped<IProgressEntryQueryService, ProgressEntryQueryService>();
+builder.Services.AddScoped<IProgressEntryRepository, ProgressEntryRepository>();
 // Localization Configuration
 builder.Services.AddLocalization();
 
