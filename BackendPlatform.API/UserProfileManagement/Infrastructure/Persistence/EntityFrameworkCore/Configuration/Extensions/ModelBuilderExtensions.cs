@@ -28,6 +28,10 @@ public static class ModelBuilderExtensions
         
         var measurements = builder.Entity<PatientProfile>().OwnsOne(c => c.Measurements);
 
+        measurements.WithOwner().HasForeignKey("PatientProfileId");
+
+        measurements.Property<int>("PatientProfileId").HasColumnName("id").IsRequired();
+
         measurements.Property(c => c.WeightKg).IsRequired().HasPrecision(5, 2);
 
         measurements.Property(c => c.HeightMeters).IsRequired().HasPrecision(3, 2);
