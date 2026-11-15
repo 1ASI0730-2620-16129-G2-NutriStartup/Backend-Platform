@@ -1,6 +1,7 @@
 ﻿using BackendPlatform.API.Nutrition.Infrastructure.Persistence.EntityFrameworkCore.Configuration.Extensions;
 using BackendPlatform.API.Shared.Infrastructure.Persistence.EntityFrameworkCore.Configuration.Extensions;
 using BackendPlatform.API.Shared.Infrastructure.Persistence.EntityFrameworkCore.Interceptors;
+using BackendPlatform.API.UserProfileManagement.Infrastructure.Persistence.EntityFrameworkCore.Configuration.Extensions;
 using Microsoft.EntityFrameworkCore;
 
 namespace BackendPlatform.API.Shared.Infrastructure.Persistence.EntityFrameworkCore.Configuration;
@@ -25,6 +26,10 @@ public class AppDbContext(DbContextOptions options) : DbContext(options)
         
         //Nutrition BC
         builder.ApplyNutritionConfiguration();
+        
+        // User Profile Management BC
+        builder.ApplyUserProfileManagementConfiguration();
+
 
         builder.UseSnakeCaseNamingConvention();
     }

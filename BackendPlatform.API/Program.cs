@@ -11,6 +11,12 @@ using Microsoft.EntityFrameworkCore;
 using BackendPlatform.API.Resources;
 using BackendPlatform.API.Shared.Domain.Repositories;
 using BackendPlatform.API.Shared.Infrastructure.Persistence.EntityFrameworkCore.Repositories;
+using BackendPlatform.API.UserProfileManagement.Application.CommandServices;
+using BackendPlatform.API.UserProfileManagement.Application.Internal.CommandServices;
+using BackendPlatform.API.UserProfileManagement.Application.Internal.QueryServices;
+using BackendPlatform.API.UserProfileManagement.Application.QueryServices;
+using BackendPlatform.API.UserProfileManagement.Domain.Repositories;
+using BackendPlatform.API.UserProfileManagement.Infrastructure.Persistence.EntityFrameworkCore.Repositories;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
@@ -64,8 +70,12 @@ builder.Services.AddProblemDetails(options =>
     };
 });
 
-// Add OpenAPI/Scalar documentation services
-builder.Services.AddOpenApi();
+// Generate the OpenAPI document with ASP.NET Core's built-in support
+/*builder.Services.AddOpenApi(options =>
+{
+    options.AddOperationTransformer(LocalizedOpenApiAssembler.TransformOperationAsync);
+    options.AddSchemaTransformer(LocalizedOpenApiAssembler.TransformSchemaAsync);
+});*/
 
 // Add Database Connection
 
@@ -108,6 +118,15 @@ builder.Services.AddScoped<IFoodRecommendationCommandService, FoodRecommendation
 builder.Services.AddScoped<IFoodRecommendationQueryService, FoodRecommendationQueryService>();
 
 builder.Services.AddSingleton<BackendPlatform.API.Shared.Interfaces.Rest.ProblemDetails.ProblemDetailsFactory>();
+
+// User Profile Management
+builder.Services.AddScoped<IPatientProfileRepository, PatientProfileRepository>();
+builder.Services.AddScoped<INutritionistProfileRepository, NutritionistProfileRepository>();
+
+builder.Services.AddScoped<IPatientProfileCommandService, PatientProfileCommandService>();
+builder.Services.AddScoped<INutritionistProfileCommandService, NutritionistProfileCommandService>();
+builder.Services.AddScoped<IPatientProfileQueryService, PatientProfileQueryService>();
+builder.Services.AddScoped<INutritionistProfileQueryService, NutritionistProfileQueryService>();
 
 var app = builder.Build();
 

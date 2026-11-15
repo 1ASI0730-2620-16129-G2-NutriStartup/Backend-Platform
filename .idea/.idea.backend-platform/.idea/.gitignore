@@ -5,6 +5,7 @@
 /.idea.backend-platform.iml
 /contentModel.xml
 /projectSettingsUpdater.xml
+/.name
 /modules.xml
 # Editor-based HTTP Client requests
 /httpRequests/
