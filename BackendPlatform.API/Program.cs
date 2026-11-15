@@ -19,7 +19,8 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Configure Lower Case URLs
 builder.Services.AddRouting(options => options.LowercaseUrls = true);
-
+builder.Services.AddScoped<IProgressEntryCommandService, ProgressEntryCommandService>();
+builder.Services.AddScoped<IProgressEntryQueryService, ProgressEntryQueryService>();
 // Localization Configuration
 builder.Services.AddLocalization();
 
