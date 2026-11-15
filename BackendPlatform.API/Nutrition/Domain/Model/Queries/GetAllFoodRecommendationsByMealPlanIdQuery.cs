@@ -2,9 +2,9 @@
 
 namespace BackendPlatform.API.Nutrition.Domain.Model.Queries;
 
-public record GetAllFoodRecommendationsByMealPlanId(MealPlanId MealPlanId)
+public record GetAllFoodRecommendationsByMealPlanIdQuery(MealPlanId MealPlanId)
 {
-    public GetAllFoodRecommendationsByMealPlanId(int mealPlanId)
+    public GetAllFoodRecommendationsByMealPlanIdQuery(int mealPlanId)
         : this(new MealPlanId(mealPlanId))
     {
     }
