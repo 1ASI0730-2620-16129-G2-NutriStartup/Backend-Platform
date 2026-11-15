@@ -31,6 +31,8 @@ builder.Services.AddRouting(options => options.LowercaseUrls = true);
 // Localization Configuration
 builder.Services.AddLocalization();
 
+builder.Services.AddOpenApi();
+
 //Configure Kebab Case Naming Convention for Controllers
 builder.Services.AddControllers(options => options.Conventions.Add(new KebabCaseRouteNamingConvention()))
     .AddDataAnnotationsLocalization(options => 
@@ -69,13 +71,6 @@ builder.Services.AddProblemDetails(options =>
         }
     };
 });
-
-// Generate the OpenAPI document with ASP.NET Core's built-in support
-/*builder.Services.AddOpenApi(options =>
-{
-    options.AddOperationTransformer(LocalizedOpenApiAssembler.TransformOperationAsync);
-    options.AddSchemaTransformer(LocalizedOpenApiAssembler.TransformSchemaAsync);
-});*/
 
 // Add Database Connection
 

@@ -29,8 +29,7 @@ public class AppDbContext(DbContextOptions options) : DbContext(options)
         
         // User Profile Management BC
         builder.ApplyUserProfileManagementConfiguration();
-
-
+        
         builder.UseSnakeCaseNamingConvention();
     }
 }
