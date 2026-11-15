@@ -23,8 +23,8 @@ public class Preference : IAuditableEntity
 
     public int Id { get; private set; }
     public int PatientProfileId { get; private set; }
-    public string DietaryPreferences { get; private set; }
-    public string FavoriteFoods { get; private set; }
+    public string DietaryPreferences { get; private set; } = string.Empty;
+    public string FavoriteFoods { get; private set; } = string.Empty;
     public PatientProfile? PatientProfile { get; private set; }
     public DateTimeOffset? CreatedAt { get; set; }
     public DateTimeOffset? UpdatedAt { get; set; }

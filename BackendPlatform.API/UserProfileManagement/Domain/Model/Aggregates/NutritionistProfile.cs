@@ -21,7 +21,7 @@ public class NutritionistProfile : IAuditableEntity
 
     public int Id { get; private set; }
     public string UserId { get; private set; }
-    public string Specialty { get; private set; }
+    public string Specialty { get; private set; } = string.Empty;
     public int ExperienceYears { get; private set; }
     [NotMapped]
     public IReadOnlyCollection<IUserProfileDomainEvent> DomainEvents => _domainEvents.AsReadOnly();

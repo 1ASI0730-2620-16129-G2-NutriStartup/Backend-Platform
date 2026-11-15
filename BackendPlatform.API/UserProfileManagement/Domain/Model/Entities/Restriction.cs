@@ -23,8 +23,8 @@ public class Restriction : IAuditableEntity
 
     public int Id { get; private set; }
     public int PatientProfileId { get; private set; }
-    public string Type { get; private set; }
-    public string Description { get; private set; }
+    public string Type { get; private set; } = string.Empty;
+    public string Description { get; private set; } = string.Empty;
     public PatientProfile? PatientProfile { get; private set; }
     public DateTimeOffset? CreatedAt { get; set; }
     public DateTimeOffset? UpdatedAt { get; set; }

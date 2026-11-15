@@ -23,10 +23,10 @@ public class Goal : IAuditableEntity
 
     public int Id { get; private set; }
     public int PatientProfileId { get; private set; }
-    public string Type { get; private set; }
+    public string Type { get; private set; } = string.Empty;
     public decimal TargetWeight { get; private set; }
     public DateOnly TargetDate { get; private set; }
-    public string Status { get; private set; }
+    public string Status { get; private set; } = string.Empty;
     public PatientProfile? PatientProfile { get; private set; }
     public DateTimeOffset? CreatedAt { get; set; }
     public DateTimeOffset? UpdatedAt { get; set; }
