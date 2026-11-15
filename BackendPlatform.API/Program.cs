@@ -17,6 +17,10 @@ using BackendPlatform.API.UserProfileManagement.Application.Internal.QueryServic
 using BackendPlatform.API.UserProfileManagement.Application.QueryServices;
 using BackendPlatform.API.UserProfileManagement.Domain.Repositories;
 using BackendPlatform.API.UserProfileManagement.Infrastructure.Persistence.EntityFrameworkCore.Repositories;
+using BackendPlatform.API.ProgressMonitoring.Application.Internal.CommandServices;
+using BackendPlatform.API.ProgressMonitoring.Application.Internal.QueryServices;
+using BackendPlatform.API.ProgressMonitoring.Domain.Repositories;
+using BackendPlatform.API.ProgressMonitoring.Domain.Services;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
@@ -72,6 +76,13 @@ builder.Services.AddProblemDetails(options =>
     };
 });
 
+// Generate the OpenAPI document with ASP.NET Core's built-in support
+/*builder.Services.AddOpenApi(options =>
+{
+    options.AddOperationTransformer(LocalizedOpenApiAssembler.TransformOperationAsync);
+    options.AddSchemaTransformer(LocalizedOpenApiAssembler.TransformSchemaAsync);
+});*/
+
 // Add Database Connection
 
 builder.Services.AddDbContext<AppDbContext>((serviceProvider, options) =>
@@ -94,6 +105,11 @@ builder.Services.AddDbContext<AppDbContext>((serviceProvider, options) =>
 });
 
 // Configure Dependency Injection
+
+// Progress Monitoring
+builder.Services.AddScoped<IProgressEntryCommandService, ProgressEntryCommandService>();
+builder.Services.AddScoped<IProgressEntryQueryService, ProgressEntryQueryService>();
+builder.Services.AddScoped<IProgressEntryRepository, ProgressEntryRepository>();
 
 // Shared bounded context Injection Configuration
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();

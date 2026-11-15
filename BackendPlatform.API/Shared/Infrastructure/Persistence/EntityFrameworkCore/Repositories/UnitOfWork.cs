@@ -23,4 +23,8 @@ public class UnitOfWork(AppDbContext context) : IUnitOfWork
     {
         await context.SaveChangesAsync(cancellationToken);
     }
+    public interface IUnitOfWork
+    {
+        Task CompleteAsync();
+    }
 }

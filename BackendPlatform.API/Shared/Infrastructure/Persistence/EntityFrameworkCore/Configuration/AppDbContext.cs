@@ -31,5 +31,6 @@ public class AppDbContext(DbContextOptions options) : DbContext(options)
         builder.ApplyUserProfileManagementConfiguration();
         
         builder.UseSnakeCaseNamingConvention();
+        builder.ApplyProgressMonitoringConfiguration();
     }
 }
