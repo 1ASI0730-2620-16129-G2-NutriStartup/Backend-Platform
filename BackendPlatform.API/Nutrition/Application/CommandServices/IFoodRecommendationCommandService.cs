@@ -4,7 +4,7 @@ using BackendPlatform.API.Shared.Application.Model;
 
 namespace BackendPlatform.API.Nutrition.Application.CommandServices;
 
-public interface IFoodRecommendationCommand
+public interface IFoodRecommendationCommandService
 {
     Task<Result<FoodRecommendation>> Handle(CreateFoodRecommendationCommand command, CancellationToken cancellationToken);
 }
