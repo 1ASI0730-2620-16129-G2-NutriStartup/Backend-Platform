@@ -5,5 +5,5 @@ namespace BackendPlatform.API.Nutrition.Domain.Repositories;
 
 public interface IFoodRecommendationRepository : IBaseRepository<FoodRecommendation>
 {
-    
+    Task<IEnumerable<FoodRecommendation>> FindByMealPlanIdAsNoTrackingAsync(int mealPlanId, CancellationToken cancellationToken);
 }
