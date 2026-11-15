@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+    <data name="GenericError" xml:space="preserve">
+    <value>Ocurrió un error.</value>
+  </data>
+    <data name="OperationCancelled" xml:space="preserve">
+    <value>La operación fue cancelada.</value>
+  </data>
+
+    <data name="NutritionError.NutritionPlanNotFound" xml:space="preserve">
+    <value>Plan de Nutrición no encontrada.</value>
+  </data>
+    <data name="NutritionError.MealPlanNotFound" xml:space="preserve">
+    <value>Plan de Comida no encontrado.</value>
+  </data>
+  <data name="NutritionError.FoodRecommendationNotFound" xml:space="preserve">
+    <value>Recomendación de Comida no encontrado.</value>
+  </data>
+
+    <data name="NutritionError.OperationCancelled" xml:space="preserve">
+    <value>La operación de nutrición fue cancelada.</value>
+  </data>
+    <data name="NutritionError.DatabaseError" xml:space="preserve">
+    <value>Ocurrió un error de base de datos durante la operación de nutrición.</value>
+  </data>
+    <data name="NutritionError.InternalServerError" xml:space="preserve">
+    <value>Ocurrió un error interno inesperado en Nutrición.</value>
+  </data>
+</root>
