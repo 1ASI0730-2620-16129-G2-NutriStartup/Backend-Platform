@@ -1,7 +1,7 @@
 using BackendPlatform.API.ProgressMonitoring.Domain.Model.Aggregates;
 using BackendPlatform.API.ProgressMonitoring.Domain.Repositories;
-using BackendPlatform.API.Shared.Infrastructure.Persistence.EFC.Configuration;
-using BackendPlatform.API.Shared.Infrastructure.Persistence.EFC.Repositories;
+using BackendPlatform.API.Shared.Infrastructure.Persistence.EntityFrameworkCore.Configuration;
+using BackendPlatform.API.Shared.Infrastructure.Persistence.EntityFrameworkCore.Repositories;
 using Microsoft.EntityFrameworkCore;
 
 namespace BackendPlatform.API.ProgressMonitoring.Infrastructure.Persistence.EFC.Repositories;

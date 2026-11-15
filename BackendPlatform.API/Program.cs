@@ -21,6 +21,7 @@ using BackendPlatform.API.ProgressMonitoring.Application.Internal.CommandService
 using BackendPlatform.API.ProgressMonitoring.Application.Internal.QueryServices;
 using BackendPlatform.API.ProgressMonitoring.Domain.Repositories;
 using BackendPlatform.API.ProgressMonitoring.Domain.Services;
+using BackendPlatform.API.ProgressMonitoring.Infrastructure.Persistence.EFC.Repositories;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Infrastructure;

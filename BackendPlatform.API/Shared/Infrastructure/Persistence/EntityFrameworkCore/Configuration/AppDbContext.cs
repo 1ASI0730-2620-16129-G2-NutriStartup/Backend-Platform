@@ -1,4 +1,5 @@
 ﻿using BackendPlatform.API.Nutrition.Infrastructure.Persistence.EntityFrameworkCore.Configuration.Extensions;
+using BackendPlatform.API.ProgressMonitoring.Infrastructure.Persistence.EFC.Configuration.Extensions;
 using BackendPlatform.API.Shared.Infrastructure.Persistence.EntityFrameworkCore.Configuration.Extensions;
 using BackendPlatform.API.Shared.Infrastructure.Persistence.EntityFrameworkCore.Interceptors;
 using BackendPlatform.API.UserProfileManagement.Infrastructure.Persistence.EntityFrameworkCore.Configuration.Extensions;
@@ -30,7 +31,9 @@ public class AppDbContext(DbContextOptions options) : DbContext(options)
         // User Profile Management BC
         builder.ApplyUserProfileManagementConfiguration();
         
-        builder.UseSnakeCaseNamingConvention();
+        // Progress Monitoring BC
         builder.ApplyProgressMonitoringConfiguration();
+        
+        builder.UseSnakeCaseNamingConvention();
     }
 }
