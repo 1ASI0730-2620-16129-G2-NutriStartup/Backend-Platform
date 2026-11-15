@@ -25,5 +25,6 @@ public class AppDbContext(DbContextOptions options) : DbContext(options)
         //Aquí agregas las cosas de tu BC
 
         builder.UseSnakeCaseNamingConvention();
+        builder.ApplyProgressMonitoringConfiguration();
     }
 }
