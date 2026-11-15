@@ -19,9 +19,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Configure Lower Case URLs
 builder.Services.AddRouting(options => options.LowercaseUrls = true);
-builder.Services.AddScoped<IProgressEntryCommandService, ProgressEntryCommandService>();
-builder.Services.AddScoped<IProgressEntryQueryService, ProgressEntryQueryService>();
-builder.Services.AddScoped<IProgressEntryRepository, ProgressEntryRepository>();
+
 // Localization Configuration
 builder.Services.AddLocalization();
 
@@ -93,6 +91,11 @@ builder.Services.AddDbContext<AppDbContext>((serviceProvider, options) =>
 });
 
 // Configure Dependency Injection
+
+// Progress Monitoring
+builder.Services.AddScoped<IProgressEntryCommandService, ProgressEntryCommandService>();
+builder.Services.AddScoped<IProgressEntryQueryService, ProgressEntryQueryService>();
+builder.Services.AddScoped<IProgressEntryRepository, ProgressEntryRepository>();
 
 // Shared bounded context Injection Configuration
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
