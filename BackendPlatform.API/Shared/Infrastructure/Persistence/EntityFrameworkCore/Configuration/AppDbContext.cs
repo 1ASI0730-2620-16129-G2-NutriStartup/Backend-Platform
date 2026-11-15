@@ -1,4 +1,5 @@
-﻿using BackendPlatform.API.Shared.Infrastructure.Persistence.EntityFrameworkCore.Configuration.Extensions;
+﻿using BackendPlatform.API.Nutrition.Infrastructure.Persistence.EntityFrameworkCore.Configuration.Extensions;
+using BackendPlatform.API.Shared.Infrastructure.Persistence.EntityFrameworkCore.Configuration.Extensions;
 using BackendPlatform.API.Shared.Infrastructure.Persistence.EntityFrameworkCore.Interceptors;
 using Microsoft.EntityFrameworkCore;
 
@@ -22,7 +23,8 @@ public class AppDbContext(DbContextOptions options) : DbContext(options)
     {
         base.OnModelCreating(builder);
         
-        //Aquí agregas las cosas de tu BC
+        //Nutrition BC
+        builder.ApplyNutritionConfiguration();
 
         builder.UseSnakeCaseNamingConvention();
     }

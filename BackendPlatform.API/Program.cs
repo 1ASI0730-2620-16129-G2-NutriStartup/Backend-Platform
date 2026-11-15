@@ -1,4 +1,10 @@
 using System.Net.Mime;
+using BackendPlatform.API.Nutrition.Application.CommandServices;
+using BackendPlatform.API.Nutrition.Application.Internal.CommandServices;
+using BackendPlatform.API.Nutrition.Application.Internal.QueryServices;
+using BackendPlatform.API.Nutrition.Application.QueryServices;
+using BackendPlatform.API.Nutrition.Domain.Repositories;
+using BackendPlatform.API.Nutrition.Infrastructure.Persistence.EntityFrameworkCore.Repositories;
 using BackendPlatform.API.Shared.Infrastructure.Persistence.EntityFrameworkCore.Configuration;
 using BackendPlatform.API.Shared.Interfaces.ASP.Configuration;
 using Microsoft.EntityFrameworkCore;
@@ -58,12 +64,8 @@ builder.Services.AddProblemDetails(options =>
     };
 });
 
-// Generate the OpenAPI document with ASP.NET Core's built-in support
-/*builder.Services.AddOpenApi(options =>
-{
-    options.AddOperationTransformer(LocalizedOpenApiAssembler.TransformOperationAsync);
-    options.AddSchemaTransformer(LocalizedOpenApiAssembler.TransformSchemaAsync);
-});*/
+// Add OpenAPI/Scalar documentation services
+builder.Services.AddOpenApi();
 
 // Add Database Connection
 
@@ -90,6 +92,22 @@ builder.Services.AddDbContext<AppDbContext>((serviceProvider, options) =>
 
 // Shared bounded context Injection Configuration
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+
+// Nutrition Bounded Context 
+builder.Services.AddScoped<INutritionPlanRepository, NutritionPlanRepository>();
+builder.Services.AddScoped<IMealPlanRepository, MealPlanRepository>();
+builder.Services.AddScoped<IFoodRecommendationRepository, FoodRecommendationRepository>();
+
+builder.Services.AddScoped<INutritionPlanCommandService, NutritionPlanCommandService>();
+builder.Services.AddScoped<INutritionPlanQueryService, NutritionPlanQueryService>();
+
+builder.Services.AddScoped<IMealPlanCommandService, MealPlanCommandService>();
+builder.Services.AddScoped<IMealPlanQueryService, MealPlanQueryService>();
+
+builder.Services.AddScoped<IFoodRecommendationCommandService, FoodRecommendationCommandService>();
+builder.Services.AddScoped<IFoodRecommendationQueryService, FoodRecommendationQueryService>();
+
+builder.Services.AddSingleton<BackendPlatform.API.Shared.Interfaces.Rest.ProblemDetails.ProblemDetailsFactory>();
 
 var app = builder.Build();
 
