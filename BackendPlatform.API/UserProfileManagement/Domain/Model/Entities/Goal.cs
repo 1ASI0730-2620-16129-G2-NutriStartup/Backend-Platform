@@ -1,22 +1,62 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using BackendPlatform.API.Shared.Domain.Model;
+using BackendPlatform.API.UserProfileManagement.Domain.Model.Aggregates;
 
 namespace BackendPlatform.API.UserProfileManagement.Domain.Model.Entities;
 
-public class Goal
+public class Goal : IAuditableEntity
 {
-    public int Id { get; set; }
-    
-    [Range(1, int.MaxValue)]
-    public int UserProfileId { get; set; }
-    
-    [Required, MaxLength(80)]
-    public string Type { get; set; } =  string.Empty;
+    private Goal()
+    {
+        Type = string.Empty;
+        Status = string.Empty;
+    }
 
-    [Range(typeof(decimal), "0.01", "999.99")]
-    public decimal TargetWeight { get; set; }
-    
-    public DateOnly TargetDate { get; set; }
-    
-    [Required, MaxLength(40)]
-    public string Status { get; set; } = string.Empty;
+    internal Goal(int patientProfileId, string type, decimal targetWeight, DateOnly targetDate, string status)
+    {
+        if (patientProfileId <= 0)
+            throw new ArgumentOutOfRangeException(nameof(patientProfileId));
+        
+        PatientProfileId = patientProfileId;
+        
+        Update(type, targetWeight, targetDate, status);
+    }
+
+    public int Id { get; private set; }
+    public int PatientProfileId { get; private set; }
+    public string Type { get; private set; }
+    public decimal TargetWeight { get; private set; }
+    public DateOnly TargetDate { get; private set; }
+    public string Status { get; private set; }
+    public PatientProfile? PatientProfile { get; private set; }
+    public DateTimeOffset? CreatedAt { get; set; }
+    public DateTimeOffset? UpdatedAt { get; set; }
+
+    internal void Update(string type, decimal targetWeight, DateOnly targetDate, string status)
+    {
+        Type = Required(type, nameof(type), 80);
+        
+        if (targetWeight <= 0 || targetWeight > 999.99m)
+            throw new ArgumentOutOfRangeException(nameof(targetWeight), "Target weight must be greater than 0 and at most 999.99 kg.");
+        
+        if (targetDate == default)
+            throw new ArgumentException("A target date is required.", nameof(targetDate));
+        
+        TargetWeight = targetWeight;
+        
+        TargetDate = targetDate;
+        
+        Status = Required(status, nameof(status), 40);
+    }
+
+    private static string Required(string value, string parameterName, int maxLength)
+    {
+        ArgumentException.ThrowIfNullOrWhiteSpace(value, parameterName);
+        
+        var normalized = value.Trim();
+        
+        if (normalized.Length > maxLength)
+            throw new ArgumentOutOfRangeException(parameterName, $"The value cannot exceed {maxLength} characters.");
+        
+        return normalized;
+    }
 }
