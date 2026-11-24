@@ -1,6 +1,6 @@
 using BackendPlatform.API.Iam.Domain.Model;
 using BackendPlatform.API.Iam.Domain.Model.Aggregates;
-using BackendPlatform.API.Resources.Errors;
+using BackendPlatform.API.Shared.Resources.Errors;
 using BackendPlatform.API.Shared.Application.Model;
 using BackendPlatform.API.Shared.Interfaces.Rest.ProblemDetails;
 using Microsoft.AspNetCore.Mvc;

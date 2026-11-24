@@ -3,7 +3,7 @@ using BackendPlatform.API.Iam.Application.CommandServices;
 using BackendPlatform.API.Iam.Infrastructure.Pipeline.Middleware.Attributes;
 using BackendPlatform.API.Iam.Interfaces.Rest.Resources;
 using BackendPlatform.API.Iam.Interfaces.Rest.Transform;
-using BackendPlatform.API.Resources.Errors;
+using BackendPlatform.API.Shared.Resources.Errors;
 using BackendPlatform.API.Shared.Interfaces.Rest.ProblemDetails;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Localization;
