@@ -1,4 +1,4 @@
-namespace Acme.Center.Platform.Iam.Domain.Model;
+namespace BackendPlatform.API.Iam.Domain.Model;
 
 public enum IamError
 {
