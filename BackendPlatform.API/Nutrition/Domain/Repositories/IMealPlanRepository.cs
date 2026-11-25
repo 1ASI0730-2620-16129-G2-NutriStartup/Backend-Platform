@@ -8,5 +8,7 @@ public interface IMealPlanRepository : IBaseRepository<MealPlan>
 {
     Task<MealPlan?> FindByIdAsNoTrackingAsync( MealPlanId id, CancellationToken cancellationToken = default);
 
-    Task<IEnumerable<MealPlan>> FindByNutritionPlanIdAsNoTrackingAsync(int nutritionPlanId, CancellationToken cancellationToken);
+    Task<IEnumerable<MealPlan>> ListWithNutritionPlanAsNoTrackingAsync( CancellationToken cancellationToken = default);
+
+    Task<IEnumerable<MealPlan>> FindByNutritionPlanIdAsNoTrackingAsync( int nutritionPlanId, CancellationToken cancellationToken);
 }

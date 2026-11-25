@@ -8,5 +8,7 @@ public interface IFoodRecommendationRepository : IBaseRepository<FoodRecommendat
 {
     Task<FoodRecommendation?> FindByIdAsNoTrackingAsync( FoodRecommendationId id, CancellationToken cancellationToken = default);
 
+    Task<IEnumerable<FoodRecommendation>> ListWithRelatedEntitiesAsNoTrackingAsync( CancellationToken cancellationToken = default);
+
     Task<IEnumerable<FoodRecommendation>> FindByMealPlanIdAsNoTrackingAsync( int mealPlanId, CancellationToken cancellationToken);
 }

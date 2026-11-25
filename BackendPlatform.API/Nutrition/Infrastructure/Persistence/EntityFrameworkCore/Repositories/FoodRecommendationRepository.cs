@@ -9,13 +9,23 @@ namespace BackendPlatform.API.Nutrition.Infrastructure.Persistence.EntityFramewo
 
 public class FoodRecommendationRepository(AppDbContext context) : BaseRepository<FoodRecommendation>(context), IFoodRecommendationRepository
 {
+    private IQueryable<FoodRecommendation> QueryWithRelatedEntities()
+    {
+        return Context.Set<FoodRecommendation>() .AsNoTracking() .Include(food => food.MealPlan) .ThenInclude(mealPlan => mealPlan.NutritionPlan);
+    }
+
     public async Task<FoodRecommendation?> FindByIdAsNoTrackingAsync( FoodRecommendationId id, CancellationToken cancellationToken = default)
     {
-        return await Context.Set<FoodRecommendation>() .AsNoTracking() .FirstOrDefaultAsync(food => food.Id == id, cancellationToken);
+        return await QueryWithRelatedEntities() .FirstOrDefaultAsync(food => food.Id == id, cancellationToken);
+    }
+
+    public async Task<IEnumerable<FoodRecommendation>> ListWithRelatedEntitiesAsNoTrackingAsync( CancellationToken cancellationToken = default)
+    {
+        return await QueryWithRelatedEntities() .ToListAsync(cancellationToken);
     }
 
     public async Task<IEnumerable<FoodRecommendation>> FindByMealPlanIdAsNoTrackingAsync( int mealPlanId, CancellationToken cancellationToken)
     {
-        return await Context.Set<FoodRecommendation>() .AsNoTracking() .AsSplitQuery() .Include(foodRecommendation => foodRecommendation.MealPlan) .Where(foodRecommendation => foodRecommendation.MealPlanId == mealPlanId) .ToListAsync(cancellationToken);
+        return await QueryWithRelatedEntities() .Where(food => food.MealPlanId == mealPlanId) .ToListAsync(cancellationToken);
     }
 }
