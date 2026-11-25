@@ -60,7 +60,7 @@ public class FoodRecommendationsController(
             result,
             _errorLocalizer,
             _problemDetailsFactory,
-            createdFoodRecommendation => CreatedAtAction(nameof(GetFoodRecommendationById), new { tutorialId = createdFoodRecommendation.Id },
+            createdFoodRecommendation => CreatedAtAction(nameof(GetFoodRecommendationById), new { foodRecommendationId = createdFoodRecommendation.Id },
                 FoodRecommendationResourceFromEntityAssembler.ToResourceFromEntity(createdFoodRecommendation))
         );
     }

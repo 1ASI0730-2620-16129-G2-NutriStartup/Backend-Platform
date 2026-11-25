@@ -16,6 +16,13 @@ public class FoodRecommendationCommandService(IFoodRecommendationRepository food
         await foodRecommendationRepository.AddAsync(foodRecommendation, cancellationToken);
         await unitOfWork.CompleteAsync(cancellationToken);
         
-        return Result<FoodRecommendation>.Success(foodRecommendation);
+        var createdFoodRecommendation = await foodRecommendationRepository
+            .FindByIdAsNoTrackingAsync(foodRecommendation.Id, cancellationToken);
+        
+        if (createdFoodRecommendation is null)
+            throw new InvalidOperationException(
+                "The created food recommendation could not be reloaded.");
+        
+        return Result<FoodRecommendation>.Success(createdFoodRecommendation);
     }
 }
