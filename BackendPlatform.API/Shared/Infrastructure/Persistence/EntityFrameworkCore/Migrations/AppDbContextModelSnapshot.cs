@@ -19,6 +19,157 @@ namespace BackendPlatform.API.Shared.Infrastructure.Persistence.EntityFrameworkC
                 .HasAnnotation("ProductVersion", "10.0.14")
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
+            modelBuilder.Entity("BackendPlatform.API.Nutrition.Domain.Model.Aggregates.FoodRecommendation", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("id");
+
+                    b.Property<string>("FoodName")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("varchar(50)")
+                        .HasColumnName("food_name");
+
+                    b.Property<int>("MealPlanId")
+                        .HasColumnType("int")
+                        .HasColumnName("meal_plan_id");
+
+                    b.Property<string>("NutritionalValue")
+                        .IsRequired()
+                        .HasMaxLength(240)
+                        .HasColumnType("varchar(240)")
+                        .HasColumnName("nutritional_value");
+
+                    b.Property<string>("Portion")
+                        .IsRequired()
+                        .HasMaxLength(240)
+                        .HasColumnType("varchar(240)")
+                        .HasColumnName("portion");
+
+                    b.HasKey("Id")
+                        .HasName("p_k_food_recommendations");
+
+                    b.HasIndex("MealPlanId")
+                        .HasDatabaseName("i_x_food_recommendations_meal_plan_id");
+
+                    b.ToTable("food_recommendations");
+                });
+
+            modelBuilder.Entity("BackendPlatform.API.Nutrition.Domain.Model.Aggregates.MealPlan", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("id");
+
+                    b.Property<int>("Calories")
+                        .HasMaxLength(50)
+                        .HasColumnType("int")
+                        .HasColumnName("calories");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasMaxLength(240)
+                        .HasColumnType("varchar(240)")
+                        .HasColumnName("description");
+
+                    b.Property<string>("MealType")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("varchar(50)")
+                        .HasColumnName("meal_type");
+
+                    b.Property<int>("NutritionPlanId")
+                        .HasColumnType("int")
+                        .HasColumnName("nutrition_plan_id");
+
+                    b.HasKey("Id")
+                        .HasName("p_k_meal_plans");
+
+                    b.HasIndex("NutritionPlanId")
+                        .HasDatabaseName("i_x_meal_plans_nutrition_plan_id");
+
+                    b.ToTable("meal_plans");
+                });
+
+            modelBuilder.Entity("BackendPlatform.API.Nutrition.Domain.Model.Aggregates.NutritionPlan", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("id");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("varchar(500)")
+                        .HasColumnName("description");
+
+                    b.Property<string>("EndDate")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("varchar(500)")
+                        .HasColumnName("end_date");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(30)
+                        .HasColumnType("varchar(30)")
+                        .HasColumnName("name");
+
+                    b.Property<string>("Objective")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("varchar(500)")
+                        .HasColumnName("objective");
+
+                    b.Property<string>("StartDate")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("varchar(500)")
+                        .HasColumnName("start_date");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int")
+                        .HasColumnName("status");
+
+                    b.HasKey("Id")
+                        .HasName("p_k_nutrition_plans");
+
+                    b.ToTable("nutrition_plans");
+                });
+
+            modelBuilder.Entity("BackendPlatform.API.ProgressMonitoring.Domain.Model.Aggregates.ProgressEntry", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("id");
+
+                    b.Property<string>("Notes")
+                        .HasMaxLength(500)
+                        .HasColumnType("varchar(500)")
+                        .HasColumnName("notes");
+
+                    b.Property<DateTime>("RecordedAt")
+                        .HasColumnType("datetime(6)")
+                        .HasColumnName("recorded_at");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int")
+                        .HasColumnName("user_id");
+
+                    b.HasKey("Id")
+                        .HasName("p_k_progress_entries");
+
+                    b.HasIndex("UserId", "RecordedAt")
+                        .HasDatabaseName("i_x_progress_entries_user_id_recorded_at");
+
+                    b.ToTable("progress_entries", (string)null);
+                });
+
             modelBuilder.Entity("BackendPlatform.API.UserProfileManagement.Domain.Model.Aggregates.NutritionistProfile", b =>
                 {
                     b.Property<int>("Id")
@@ -242,6 +393,67 @@ namespace BackendPlatform.API.Shared.Infrastructure.Persistence.EntityFrameworkC
                     b.ToTable("restrictions");
                 });
 
+            modelBuilder.Entity("BackendPlatform.API.Nutrition.Domain.Model.Aggregates.FoodRecommendation", b =>
+                {
+                    b.HasOne("BackendPlatform.API.Nutrition.Domain.Model.Aggregates.MealPlan", "MealPlan")
+                        .WithMany("FoodRecommendations")
+                        .HasForeignKey("MealPlanId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("f_k_food_recommendations__meal_plan_meal_plan_id");
+
+                    b.Navigation("MealPlan");
+                });
+
+            modelBuilder.Entity("BackendPlatform.API.Nutrition.Domain.Model.Aggregates.MealPlan", b =>
+                {
+                    b.HasOne("BackendPlatform.API.Nutrition.Domain.Model.Aggregates.NutritionPlan", "NutritionPlan")
+                        .WithMany("MealPlans")
+                        .HasForeignKey("NutritionPlanId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("f_k_meal_plans__nutrition_plan_nutrition_plan_id");
+
+                    b.Navigation("NutritionPlan");
+                });
+
+            modelBuilder.Entity("BackendPlatform.API.ProgressMonitoring.Domain.Model.Aggregates.ProgressEntry", b =>
+                {
+                    b.OwnsOne("BackendPlatform.API.ProgressMonitoring.Domain.Model.ValueObjects.BodyMeasurements", "Measurements", b1 =>
+                        {
+                            b1.Property<int>("Id")
+                                .HasColumnType("int")
+                                .HasColumnName("id");
+
+                            b1.Property<decimal?>("BodyFatPercentage")
+                                .HasPrecision(4, 1)
+                                .HasColumnType("decimal(4,1)")
+                                .HasColumnName("body_fat_percentage");
+
+                            b1.Property<decimal?>("WaistCm")
+                                .HasPrecision(5, 1)
+                                .HasColumnType("decimal(5,1)")
+                                .HasColumnName("waist_cm");
+
+                            b1.Property<decimal>("WeightKg")
+                                .HasPrecision(5, 2)
+                                .HasColumnType("decimal(5,2)")
+                                .HasColumnName("weight_kg");
+
+                            b1.HasKey("Id")
+                                .HasName("p_k_progress_entries");
+
+                            b1.ToTable("progress_entries");
+
+                            b1.WithOwner()
+                                .HasForeignKey("Id")
+                                .HasConstraintName("f_k_progress_entries_progress_entries_id");
+                        });
+
+                    b.Navigation("Measurements")
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("BackendPlatform.API.UserProfileManagement.Domain.Model.Aggregates.PatientProfile", b =>
                 {
                     b.OwnsOne("BackendPlatform.API.UserProfileManagement.Domain.Model.ValueObjects.Measurements", "Measurements", b1 =>
@@ -308,6 +520,16 @@ namespace BackendPlatform.API.Shared.Infrastructure.Persistence.EntityFrameworkC
                         .HasConstraintName("f_k_restrictions_patient_profiles_patient_profile_id");
 
                     b.Navigation("PatientProfile");
+                });
+
+            modelBuilder.Entity("BackendPlatform.API.Nutrition.Domain.Model.Aggregates.MealPlan", b =>
+                {
+                    b.Navigation("FoodRecommendations");
+                });
+
+            modelBuilder.Entity("BackendPlatform.API.Nutrition.Domain.Model.Aggregates.NutritionPlan", b =>
+                {
+                    b.Navigation("MealPlans");
                 });
 
             modelBuilder.Entity("BackendPlatform.API.UserProfileManagement.Domain.Model.Aggregates.PatientProfile", b =>
