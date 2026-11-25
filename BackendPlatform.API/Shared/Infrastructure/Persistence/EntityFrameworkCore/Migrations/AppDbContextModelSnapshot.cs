@@ -54,7 +54,7 @@ namespace BackendPlatform.API.Shared.Infrastructure.Persistence.EntityFrameworkC
                     b.HasIndex("MealPlanId")
                         .HasDatabaseName("i_x_food_recommendations_meal_plan_id");
 
-                    b.ToTable("food_recommendations");
+                    b.ToTable("food_recommendations", (string)null);
                 });
 
             modelBuilder.Entity("BackendPlatform.API.Nutrition.Domain.Model.Aggregates.MealPlan", b =>
@@ -91,7 +91,7 @@ namespace BackendPlatform.API.Shared.Infrastructure.Persistence.EntityFrameworkC
                     b.HasIndex("NutritionPlanId")
                         .HasDatabaseName("i_x_meal_plans_nutrition_plan_id");
 
-                    b.ToTable("meal_plans");
+                    b.ToTable("meal_plans", (string)null);
                 });
 
             modelBuilder.Entity("BackendPlatform.API.Nutrition.Domain.Model.Aggregates.NutritionPlan", b =>
@@ -138,7 +138,7 @@ namespace BackendPlatform.API.Shared.Infrastructure.Persistence.EntityFrameworkC
                     b.HasKey("Id")
                         .HasName("p_k_nutrition_plans");
 
-                    b.ToTable("nutrition_plans");
+                    b.ToTable("nutrition_plans", (string)null);
                 });
 
             modelBuilder.Entity("BackendPlatform.API.ProgressMonitoring.Domain.Model.Aggregates.ProgressEntry", b =>
@@ -208,7 +208,7 @@ namespace BackendPlatform.API.Shared.Infrastructure.Persistence.EntityFrameworkC
                         .IsUnique()
                         .HasDatabaseName("i_x_nutritionist_profiles_user_id");
 
-                    b.ToTable("nutritionist_profiles");
+                    b.ToTable("nutritionist_profiles", (string)null);
                 });
 
             modelBuilder.Entity("BackendPlatform.API.UserProfileManagement.Domain.Model.Aggregates.PatientProfile", b =>
@@ -261,7 +261,7 @@ namespace BackendPlatform.API.Shared.Infrastructure.Persistence.EntityFrameworkC
                         .IsUnique()
                         .HasDatabaseName("i_x_patient_profiles_user_id");
 
-                    b.ToTable("patient_profiles");
+                    b.ToTable("patient_profiles", (string)null);
                 });
 
             modelBuilder.Entity("BackendPlatform.API.UserProfileManagement.Domain.Model.Entities.Goal", b =>
@@ -310,7 +310,7 @@ namespace BackendPlatform.API.Shared.Infrastructure.Persistence.EntityFrameworkC
                     b.HasIndex("PatientProfileId")
                         .HasDatabaseName("i_x_goals_patient_profile_id");
 
-                    b.ToTable("goals");
+                    b.ToTable("goals", (string)null);
                 });
 
             modelBuilder.Entity("BackendPlatform.API.UserProfileManagement.Domain.Model.Entities.Preference", b =>
@@ -350,7 +350,7 @@ namespace BackendPlatform.API.Shared.Infrastructure.Persistence.EntityFrameworkC
                     b.HasIndex("PatientProfileId")
                         .HasDatabaseName("i_x_preferences_patient_profile_id");
 
-                    b.ToTable("preferences");
+                    b.ToTable("preferences", (string)null);
                 });
 
             modelBuilder.Entity("BackendPlatform.API.UserProfileManagement.Domain.Model.Entities.Restriction", b =>
@@ -390,7 +390,7 @@ namespace BackendPlatform.API.Shared.Infrastructure.Persistence.EntityFrameworkC
                     b.HasIndex("PatientProfileId")
                         .HasDatabaseName("i_x_restrictions_patient_profile_id");
 
-                    b.ToTable("restrictions");
+                    b.ToTable("restrictions", (string)null);
                 });
 
             modelBuilder.Entity("BackendPlatform.API.Nutrition.Domain.Model.Aggregates.FoodRecommendation", b =>
@@ -443,7 +443,7 @@ namespace BackendPlatform.API.Shared.Infrastructure.Persistence.EntityFrameworkC
                             b1.HasKey("Id")
                                 .HasName("p_k_progress_entries");
 
-                            b1.ToTable("progress_entries");
+                            b1.ToTable("progress_entries", (string)null);
 
                             b1.WithOwner()
                                 .HasForeignKey("Id")
@@ -475,7 +475,7 @@ namespace BackendPlatform.API.Shared.Infrastructure.Persistence.EntityFrameworkC
                             b1.HasKey("PatientProfileId")
                                 .HasName("p_k_patient_profiles");
 
-                            b1.ToTable("patient_profiles");
+                            b1.ToTable("patient_profiles", (string)null);
 
                             b1.WithOwner()
                                 .HasForeignKey("PatientProfileId")

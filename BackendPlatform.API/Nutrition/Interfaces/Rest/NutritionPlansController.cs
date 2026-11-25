@@ -25,8 +25,8 @@ public class NutritionPlansController(
     private readonly ProblemDetailsFactory _problemDetailsFactory = problemDetailsFactory;
     
     [HttpGet("{nutritionPlanId:int}")]
-    [EndpointSummary("Get all nutrition plans")]
-    [EndpointDescription("Get all nutrition plans")]
+    [EndpointSummary("Get a nutrition plan by its id")]
+    [EndpointDescription("Get a nutrition plan by its id")]
     [ProducesResponseType(typeof(NutritionPlanResource), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetNutritionPlanById(int nutritionPlanId, CancellationToken cancellationToken)
