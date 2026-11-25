@@ -16,6 +16,13 @@ public class MealPlanCommandService(IMealPlanRepository mealPlanRepository,
         await mealPlanRepository.AddAsync(mealPlan, cancellationToken);
         await unitOfWork.CompleteAsync(cancellationToken);
         
-        return Result<MealPlan>.Success(mealPlan);
+        var createdMealPlan = await mealPlanRepository
+            .FindByIdAsNoTrackingAsync(mealPlan.Id, cancellationToken);
+        
+        if (createdMealPlan is null)
+            throw new InvalidOperationException(
+                "The created meal plan could not be reloaded.");
+        
+        return Result<MealPlan>.Success(createdMealPlan);
     }
 }
