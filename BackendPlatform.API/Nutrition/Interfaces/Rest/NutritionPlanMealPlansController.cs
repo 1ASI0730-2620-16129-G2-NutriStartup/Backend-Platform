@@ -11,7 +11,7 @@ using Microsoft.Extensions.Localization;
 namespace BackendPlatform.API.Nutrition.Interfaces.Rest;
 
 [ApiController]
-[Route("api/v1/nutritionPlans/{nutritionPlanId:int}/mealPlans")]
+[Route("api/v1/nutrition-plans/{nutritionPlanId:int}/meal-plans")]
 [Produces(MediaTypeNames.Application.Json)]
 [Tags("NutritionPlans")]
 public class NutritionPlanMealPlansController(
