@@ -5,5 +5,4 @@ public record CreateNutritionPlanCommand(
     string Description,
     string Objective,
     string StartDate,
-    string EndDate,
-    string Status);
+    string EndDate);

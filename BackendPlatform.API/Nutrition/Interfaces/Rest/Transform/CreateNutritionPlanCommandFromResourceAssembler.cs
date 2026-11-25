@@ -11,6 +11,6 @@ public static class CreateNutritionPlanCommandFromResourceAssembler
             throw new ArgumentNullException(nameof(resource),
                 "CreateNutritionPlanResource cannot be null when converting to command.");
         return new CreateNutritionPlanCommand(resource.Name, resource.Description, resource.Objective,
-            resource.StartDate, resource.EndDate, resource.Status.ToString());
+            resource.StartDate, resource.EndDate);
     }
 }
