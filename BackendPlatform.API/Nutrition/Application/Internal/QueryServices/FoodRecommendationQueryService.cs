@@ -13,9 +13,9 @@ public class FoodRecommendationQueryService(IFoodRecommendationRepository foodRe
         return await foodRecommendationRepository.FindByIdAsNoTrackingAsync(query.FoodRecommendationId, cancellationToken);
     }
 
-    public async Task<IEnumerable<FoodRecommendation>> Handle(GetAllFoodRecommendationsQuery query, CancellationToken cancellationToken)
+    public async Task<IEnumerable<FoodRecommendation>> Handle( GetAllFoodRecommendationsQuery query, CancellationToken cancellationToken)
     {
-        return await foodRecommendationRepository.ListAsNoTrackingAsync(cancellationToken);
+        return await foodRecommendationRepository.ListWithRelatedEntitiesAsNoTrackingAsync(cancellationToken);
     }
 
     public async Task<IEnumerable<FoodRecommendation>> Handle(GetAllFoodRecommendationsByMealPlanIdQuery query, CancellationToken cancellationToken)

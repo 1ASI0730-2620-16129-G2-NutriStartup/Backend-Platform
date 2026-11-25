@@ -12,9 +12,9 @@ public class MealPlanQueryService(IMealPlanRepository mealPlanRepository) : IMea
         return await mealPlanRepository.FindByIdAsNoTrackingAsync(query.MealPlanId, cancellationToken);
     }
 
-    public async Task<IEnumerable<MealPlan>> Handle(GetAllMealPlansQuery query, CancellationToken cancellationToken)
+    public async Task<IEnumerable<MealPlan>> Handle( GetAllMealPlansQuery query, CancellationToken cancellationToken)
     {
-        return await mealPlanRepository.ListAsNoTrackingAsync(cancellationToken);
+        return await mealPlanRepository.ListWithNutritionPlanAsNoTrackingAsync(cancellationToken);
     }
 
     public async Task<IEnumerable<MealPlan>> Handle(GetAllMealPlansByNutritionPlanIdQuery query, CancellationToken cancellationToken)
