@@ -6,7 +6,7 @@
     <data name="MealPlanAdded" xml:space="preserve">
     <value>Plan de Comida añadido exitosamente.</value>
   </data>
-    <data name="FoodRecommendationPlanAdded" xml:space="preserve">
+    <data name="FoodRecommendationAdded" xml:space="preserve">
     <value>Recomendación de Alimento añadido exitosamente.</value>
   </data>
 </root>
