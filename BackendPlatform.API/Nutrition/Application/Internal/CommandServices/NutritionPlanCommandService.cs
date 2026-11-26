@@ -1,4 +1,5 @@
 ﻿using BackendPlatform.API.Nutrition.Application.CommandServices;
+using BackendPlatform.API.Nutrition.Domain.Model;
 using BackendPlatform.API.Nutrition.Domain.Model.Aggregates;
 using BackendPlatform.API.Nutrition.Domain.Model.Commands;
 using BackendPlatform.API.Nutrition.Domain.Repositories;
@@ -17,5 +18,20 @@ public class NutritionPlanCommandService(INutritionPlanRepository nutritionPlanR
         await unitOfWork.CompleteAsync(cancellationToken);
         
         return Result<NutritionPlan>.Success(nutritionPlan);
+    }
+    
+    public async Task<Result<bool>> Handle(DeleteNutritionPlanCommand command, CancellationToken cancellationToken)
+    {
+        var nutritionPlan = await nutritionPlanRepository.FindTrackedByIdAsync(command.NutritionPlanId, cancellationToken);
+
+        if (nutritionPlan is null)
+            return Result<bool>.Failure(
+                NutritionError.NutritionPlanNotFound,
+                "Nutrition plan not found.");
+
+        nutritionPlanRepository.Remove(nutritionPlan);
+        await unitOfWork.CompleteAsync(cancellationToken);
+
+        return Result<bool>.Success(true);
     }
 }

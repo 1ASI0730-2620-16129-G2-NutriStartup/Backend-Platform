@@ -10,8 +10,13 @@ namespace BackendPlatform.API.Nutrition.Infrastructure.Persistence.EntityFramewo
 public class NutritionPlanRepository(AppDbContext context)
     : BaseRepository<NutritionPlan>(context), INutritionPlanRepository
 {
-    public async Task<NutritionPlan?> FindByIdAsNoTrackingAsync( NutritionPlanId id, CancellationToken cancellationToken = default)
+    public async Task<NutritionPlan?> FindByIdAsNoTrackingAsync(NutritionPlanId id, CancellationToken cancellationToken = default)
     {
-        return await Context.Set<NutritionPlan>() .AsNoTracking() .FirstOrDefaultAsync(plan => plan.Id == id, cancellationToken);
+        return await Context.Set<NutritionPlan>().AsNoTracking().FirstOrDefaultAsync(plan => plan.Id == id, cancellationToken);
+    }
+    
+    public async Task<NutritionPlan?> FindTrackedByIdAsync(NutritionPlanId id, CancellationToken cancellationToken = default)
+    {
+        return await Context.Set<NutritionPlan>().FirstOrDefaultAsync(plan => plan.Id == id, cancellationToken);
     }
 }

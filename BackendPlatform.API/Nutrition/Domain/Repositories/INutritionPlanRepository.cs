@@ -9,4 +9,8 @@ public interface INutritionPlanRepository : IBaseRepository<NutritionPlan>
     Task<NutritionPlan?> FindByIdAsNoTrackingAsync(
         NutritionPlanId id,
         CancellationToken cancellationToken = default);
+    
+    Task<NutritionPlan?> FindTrackedByIdAsync(
+        NutritionPlanId id,
+        CancellationToken cancellationToken = default);
 }
