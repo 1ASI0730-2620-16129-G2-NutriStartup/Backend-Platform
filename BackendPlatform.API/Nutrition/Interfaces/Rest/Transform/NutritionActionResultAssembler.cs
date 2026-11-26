@@ -158,6 +158,23 @@ public static class NutritionActionResultAssembler
         return successAction(foodRecommendation);
     }
     
+    public static IActionResult ToActionResultFromDeleteFoodRecommendationResult(
+        ControllerBase controller,
+        Result<bool> result,
+        IStringLocalizer<ErrorMessages> errorLocalizer,
+        ProblemDetailsFactory problemDetailsFactory)
+    {
+        if (result.IsSuccess)
+            return controller.NoContent();
+
+        var statusCode = ToStatusCodeFromNutritionError((NutritionError)result.Error!);
+        return problemDetailsFactory.CreateProblemDetails(
+            controller,
+            statusCode,
+            result.Error,
+            result.Message);
+    }
+    
     public static IActionResult ToActionResultFromGetAllFoodRecommendationsByMealPlanIdResult(
         ControllerBase controller,
         IEnumerable<FoodRecommendation> foodRecommendations,

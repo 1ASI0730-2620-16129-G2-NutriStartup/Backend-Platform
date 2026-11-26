@@ -1,6 +1,7 @@
 ﻿using System.Net.Mime;
 using BackendPlatform.API.Nutrition.Application.CommandServices;
 using BackendPlatform.API.Nutrition.Application.QueryServices;
+using BackendPlatform.API.Nutrition.Domain.Model.Commands;
 using BackendPlatform.API.Nutrition.Domain.Model.Queries;
 using BackendPlatform.API.Nutrition.Interfaces.Rest.Resources;
 using BackendPlatform.API.Nutrition.Interfaces.Rest.Transform;
@@ -75,5 +76,25 @@ public class FoodRecommendationsController(
         var foodRecommendations = await foodRecommendationQueryService.Handle(getAllFoodRecommendationsQuery, cancellationToken);
         var foodRecommendationResources = foodRecommendations.Select(FoodRecommendationResourceFromEntityAssembler.ToResourceFromEntity);
         return Ok(foodRecommendationResources);
+    }
+    
+    [HttpDelete("{foodRecommendationId:int}")]
+    [EndpointSummary("Delete food recommendation by its id")]
+    [EndpointDescription("Delete food recommendation by its id")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> DeleteFoodRecommendation(
+        [FromRoute] int foodRecommendationId,
+        CancellationToken cancellationToken)
+    {
+        var result = await foodRecommendationCommandService.Handle(
+            new DeleteFoodRecommendationCommand(foodRecommendationId),
+            cancellationToken);
+
+        return NutritionActionResultAssembler.ToActionResultFromDeleteFoodRecommendationResult(
+            this,
+            result,
+            _errorLocalizer,
+            _problemDetailsFactory);
     }
 }

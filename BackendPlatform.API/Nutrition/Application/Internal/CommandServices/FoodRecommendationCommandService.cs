@@ -1,4 +1,5 @@
 ﻿using BackendPlatform.API.Nutrition.Application.CommandServices;
+using BackendPlatform.API.Nutrition.Domain.Model;
 using BackendPlatform.API.Nutrition.Domain.Model.Aggregates;
 using BackendPlatform.API.Nutrition.Domain.Model.Commands;
 using BackendPlatform.API.Nutrition.Domain.Repositories;
@@ -24,5 +25,20 @@ public class FoodRecommendationCommandService(IFoodRecommendationRepository food
                 "The created food recommendation could not be reloaded.");
         
         return Result<FoodRecommendation>.Success(createdFoodRecommendation);
+    }
+    
+    public async Task<Result<bool>> Handle(DeleteFoodRecommendationCommand command, CancellationToken cancellationToken)
+    {
+        var foodRecommendation = await foodRecommendationRepository.FindTrackedByIdAsync(command.FoodRecommendationId, cancellationToken);
+
+        if (foodRecommendation is null)
+            return Result<bool>.Failure(
+                NutritionError.FoodRecommendationNotFound,
+                "Food Recommendation not found.");
+
+        foodRecommendationRepository.Remove(foodRecommendation);
+        await unitOfWork.CompleteAsync(cancellationToken);
+
+        return Result<bool>.Success(true);
     }
 }

@@ -9,9 +9,9 @@ namespace BackendPlatform.API.Nutrition.Infrastructure.Persistence.EntityFramewo
 
 public class MealPlanRepository(AppDbContext context) : BaseRepository<MealPlan>(context), IMealPlanRepository
 {
-    public async Task<MealPlan?> FindByIdAsNoTrackingAsync( MealPlanId id, CancellationToken cancellationToken = default)
+    public async Task<MealPlan?> FindByIdAsNoTrackingAsync(MealPlanId id, CancellationToken cancellationToken = default)
     {
-        return await Context.Set<MealPlan>() .AsNoTracking() .Include(mealPlan => mealPlan.NutritionPlan) .FirstOrDefaultAsync(mealPlan => mealPlan.Id == id, cancellationToken);
+        return await Context.Set<MealPlan>().AsNoTracking().Include(mealPlan => mealPlan.NutritionPlan) .FirstOrDefaultAsync(mealPlan => mealPlan.Id == id, cancellationToken);
     }
     
     public async Task<MealPlan?> FindTrackedByIdAsync(MealPlanId id, CancellationToken cancellationToken = default)
@@ -19,13 +19,13 @@ public class MealPlanRepository(AppDbContext context) : BaseRepository<MealPlan>
         return await Context.Set<MealPlan>().FirstOrDefaultAsync(plan => plan.Id == id, cancellationToken);
     }
 
-    public async Task<IEnumerable<MealPlan>> ListWithNutritionPlanAsNoTrackingAsync( CancellationToken cancellationToken = default)
+    public async Task<IEnumerable<MealPlan>> ListWithNutritionPlanAsNoTrackingAsync(CancellationToken cancellationToken = default)
     {
-        return await Context.Set<MealPlan>() .AsNoTracking() .Include(mealPlan => mealPlan.NutritionPlan) .ToListAsync(cancellationToken);
+        return await Context.Set<MealPlan>().AsNoTracking().Include(mealPlan => mealPlan.NutritionPlan) .ToListAsync(cancellationToken);
     }
 
-    public async Task<IEnumerable<MealPlan>> FindByNutritionPlanIdAsNoTrackingAsync( int nutritionPlanId, CancellationToken cancellationToken)
+    public async Task<IEnumerable<MealPlan>> FindByNutritionPlanIdAsNoTrackingAsync(int nutritionPlanId, CancellationToken cancellationToken)
     {
-        return await Context.Set<MealPlan>() .AsNoTracking() .Include(mealPlan => mealPlan.NutritionPlan) .Where(mealPlan => mealPlan.NutritionPlanId == nutritionPlanId) .ToListAsync(cancellationToken);
+        return await Context.Set<MealPlan>().AsNoTracking().Include(mealPlan => mealPlan.NutritionPlan) .Where(mealPlan => mealPlan.NutritionPlanId == nutritionPlanId) .ToListAsync(cancellationToken);
     }
 }

@@ -7,4 +7,6 @@ namespace BackendPlatform.API.Nutrition.Application.CommandServices;
 public interface IFoodRecommendationCommandService
 {
     Task<Result<FoodRecommendation>> Handle(CreateFoodRecommendationCommand command, CancellationToken cancellationToken);
+    
+    Task<Result<bool>> Handle(DeleteFoodRecommendationCommand command, CancellationToken cancellationToken);
 }

@@ -11,21 +11,26 @@ public class FoodRecommendationRepository(AppDbContext context) : BaseRepository
 {
     private IQueryable<FoodRecommendation> QueryWithRelatedEntities()
     {
-        return Context.Set<FoodRecommendation>() .AsNoTracking() .Include(food => food.MealPlan) .ThenInclude(mealPlan => mealPlan.NutritionPlan);
+        return Context.Set<FoodRecommendation>().AsNoTracking().Include(food => food.MealPlan) .ThenInclude(mealPlan => mealPlan.NutritionPlan);
     }
 
     public async Task<FoodRecommendation?> FindByIdAsNoTrackingAsync( FoodRecommendationId id, CancellationToken cancellationToken = default)
     {
-        return await QueryWithRelatedEntities() .FirstOrDefaultAsync(food => food.Id == id, cancellationToken);
+        return await QueryWithRelatedEntities().FirstOrDefaultAsync(food => food.Id == id, cancellationToken);
     }
 
-    public async Task<IEnumerable<FoodRecommendation>> ListWithRelatedEntitiesAsNoTrackingAsync( CancellationToken cancellationToken = default)
+    public async Task<FoodRecommendation?> FindTrackedByIdAsync(FoodRecommendationId id, CancellationToken cancellationToken = default)
     {
-        return await QueryWithRelatedEntities() .ToListAsync(cancellationToken);
+        return await Context.Set<FoodRecommendation>().FirstOrDefaultAsync(food => food.Id == id, cancellationToken);
     }
 
-    public async Task<IEnumerable<FoodRecommendation>> FindByMealPlanIdAsNoTrackingAsync( int mealPlanId, CancellationToken cancellationToken)
+    public async Task<IEnumerable<FoodRecommendation>> ListWithRelatedEntitiesAsNoTrackingAsync(CancellationToken cancellationToken = default)
     {
-        return await QueryWithRelatedEntities() .Where(food => food.MealPlanId == mealPlanId) .ToListAsync(cancellationToken);
+        return await QueryWithRelatedEntities().ToListAsync(cancellationToken);
+    }
+
+    public async Task<IEnumerable<FoodRecommendation>> FindByMealPlanIdAsNoTrackingAsync(int mealPlanId, CancellationToken cancellationToken)
+    {
+        return await QueryWithRelatedEntities().Where(food => food.MealPlanId == mealPlanId).ToListAsync(cancellationToken);
     }
 }
