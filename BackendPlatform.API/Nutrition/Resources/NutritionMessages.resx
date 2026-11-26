@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+    <data name="NutritionPlanAdded" xml:space="preserve">
+    <value>Nutrition Plan added successfully.</value>
+  </data>
+    <data name="MealPlanAdded" xml:space="preserve">
+    <value>Meal Plan added successfully.</value>
+  </data>
+    <data name="FoodRecommendationAdded" xml:space="preserve">
+    <value>Food Recommendation added successfully.</value>
+  </data>
+</root>
