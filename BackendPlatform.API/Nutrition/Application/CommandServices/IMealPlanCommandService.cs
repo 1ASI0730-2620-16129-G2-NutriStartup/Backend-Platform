@@ -7,4 +7,6 @@ namespace BackendPlatform.API.Nutrition.Application.CommandServices;
 public interface IMealPlanCommandService
 {
     Task<Result<MealPlan>> Handle(CreateMealPlanCommand command, CancellationToken cancellationToken);
+    
+    Task<Result<bool>> Handle(DeleteMealPlanCommand command, CancellationToken cancellationToken);
 }

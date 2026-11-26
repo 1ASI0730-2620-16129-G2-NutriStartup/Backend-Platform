@@ -1,6 +1,7 @@
 ﻿using System.Net.Mime;
 using BackendPlatform.API.Nutrition.Application.CommandServices;
 using BackendPlatform.API.Nutrition.Application.QueryServices;
+using BackendPlatform.API.Nutrition.Domain.Model.Commands;
 using BackendPlatform.API.Nutrition.Domain.Model.Queries;
 using BackendPlatform.API.Nutrition.Interfaces.Rest.Resources;
 using BackendPlatform.API.Nutrition.Interfaces.Rest.Transform;
@@ -75,5 +76,25 @@ public class MealPlansController(
         var mealPlans = await mealPlanQueryService.Handle(getAllMealPlansQuery, cancellationToken);
         var mealPlanResources = mealPlans.Select(MealPlanResourceFromEntityAssembler.ToResourceFromEntity);
         return Ok(mealPlanResources);
+    }
+    
+    [HttpDelete("{mealPlanId:int}")]
+    [EndpointSummary("Delete meal plan by its id")]
+    [EndpointDescription("Delete meal plan by its id")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> DeleteMealPlan(
+        [FromRoute] int mealPlanId,
+        CancellationToken cancellationToken)
+    {
+        var result = await mealPlanCommandService.Handle(
+            new DeleteMealPlanCommand(mealPlanId),
+            cancellationToken);
+
+        return NutritionActionResultAssembler.ToActionResultFromDeleteMealPlanResult(
+            this,
+            result,
+            _errorLocalizer,
+            _problemDetailsFactory);
     }
 }

@@ -13,6 +13,11 @@ public class MealPlanRepository(AppDbContext context) : BaseRepository<MealPlan>
     {
         return await Context.Set<MealPlan>() .AsNoTracking() .Include(mealPlan => mealPlan.NutritionPlan) .FirstOrDefaultAsync(mealPlan => mealPlan.Id == id, cancellationToken);
     }
+    
+    public async Task<MealPlan?> FindTrackedByIdAsync(MealPlanId id, CancellationToken cancellationToken = default)
+    {
+        return await Context.Set<MealPlan>().FirstOrDefaultAsync(plan => plan.Id == id, cancellationToken);
+    }
 
     public async Task<IEnumerable<MealPlan>> ListWithNutritionPlanAsNoTrackingAsync( CancellationToken cancellationToken = default)
     {

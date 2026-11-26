@@ -1,4 +1,5 @@
 ﻿using BackendPlatform.API.Nutrition.Application.CommandServices;
+using BackendPlatform.API.Nutrition.Domain.Model;
 using BackendPlatform.API.Nutrition.Domain.Model.Aggregates;
 using BackendPlatform.API.Nutrition.Domain.Model.Commands;
 using BackendPlatform.API.Nutrition.Domain.Repositories;
@@ -24,5 +25,20 @@ public class MealPlanCommandService(IMealPlanRepository mealPlanRepository,
                 "The created meal plan could not be reloaded.");
         
         return Result<MealPlan>.Success(createdMealPlan);
+    }
+    
+    public async Task<Result<bool>> Handle(DeleteMealPlanCommand command, CancellationToken cancellationToken)
+    {
+        var mealPlan = await mealPlanRepository.FindTrackedByIdAsync(command.MealPlanId, cancellationToken);
+
+        if (mealPlan is null)
+            return Result<bool>.Failure(
+                NutritionError.MealPlanNotFound,
+                "Meal plan not found.");
+
+        mealPlanRepository.Remove(mealPlan);
+        await unitOfWork.CompleteAsync(cancellationToken);
+
+        return Result<bool>.Success(true);
     }
 }
