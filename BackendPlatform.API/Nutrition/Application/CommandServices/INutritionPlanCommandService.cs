@@ -8,5 +8,7 @@ public interface INutritionPlanCommandService
 {
     Task<Result<NutritionPlan>> Handle(CreateNutritionPlanCommand command, CancellationToken cancellationToken);
     
+    Task<Result<NutritionPlan>> Handle(UpdateNutritionPlanCommand command, CancellationToken cancellationToken);
+    
     Task<Result<bool>> Handle(DeleteNutritionPlanCommand command, CancellationToken cancellationToken);
 }

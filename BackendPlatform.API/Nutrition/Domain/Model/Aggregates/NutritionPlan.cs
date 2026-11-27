@@ -39,6 +39,30 @@ public partial class NutritionPlan : AggregateRoot
     public string EndDate { get; private set; }
     public NutritionPlanStatus Status { get; private set; } = NutritionPlanStatus.Active;
     
+    public void UpdateInformation(
+        string name,
+        string description,
+        string objective,
+        string startDate,
+        string endDate,
+        string status)
+    {
+        ArgumentException.ThrowIfNullOrWhiteSpace(name);
+        ArgumentException.ThrowIfNullOrWhiteSpace(description);
+        ArgumentException.ThrowIfNullOrWhiteSpace(objective);
+        ArgumentException.ThrowIfNullOrWhiteSpace(startDate);
+        ArgumentException.ThrowIfNullOrWhiteSpace(endDate);
+        
+        var parsedStatus = ParseStatus(status);
+
+        Name = name;
+        Description = description;
+        Objective = objective;
+        StartDate = startDate;
+        EndDate = endDate;
+        Status = parsedStatus;
+    }
+    
     private static NutritionPlanStatus ParseStatus(string status)
     {
         if (!Enum.TryParse(status, ignoreCase: true, out NutritionPlanStatus parsedStatus) ||

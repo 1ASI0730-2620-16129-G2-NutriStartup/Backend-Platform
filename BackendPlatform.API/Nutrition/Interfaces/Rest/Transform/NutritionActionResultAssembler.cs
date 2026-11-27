@@ -14,6 +14,7 @@ public static class NutritionActionResultAssembler
     {
         return error switch
         {
+            NutritionError.InvalidData => StatusCodes.Status400BadRequest,
             NutritionError.NutritionPlanNotFound => StatusCodes.Status404NotFound,
             NutritionError.MealPlanNotFound => StatusCodes.Status404NotFound,
             NutritionError.FoodRecommendationNotFound => StatusCodes.Status404NotFound,
@@ -52,6 +53,24 @@ public static class NutritionActionResultAssembler
                 errorLocalizer[nameof(NutritionError.NutritionPlanNotFound)]
             );
         return successAction(nutritionPlan);
+    }
+    
+    public static IActionResult ToActionResultFromUpdateNutritionPlanResult(
+        ControllerBase controller,
+        Result<NutritionPlan> result,
+        IStringLocalizer<ErrorMessages> errorLocalizer,
+        ProblemDetailsFactory problemDetailsFactory,
+        Func<NutritionPlan, IActionResult> successAction)
+    {
+        if (result.IsSuccess)
+            return successAction(result.Value!);
+
+        var statusCode = ToStatusCodeFromNutritionError((NutritionError)result.Error!);
+        return problemDetailsFactory.CreateProblemDetails(
+            controller,
+            statusCode,
+            result.Error,
+            result.Message);
     }
     
     public static IActionResult ToActionResultFromDeleteNutritionPlanResult(

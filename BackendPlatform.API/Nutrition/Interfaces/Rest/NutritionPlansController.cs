@@ -77,6 +77,30 @@ public class NutritionPlansController(
         return Ok(nutritionPlanResources);
     }
     
+    [HttpPut("{nutritionPlanId:int}")]
+    [EndpointSummary("Update a nutrition plan")]
+    [EndpointDescription("Update a nutrition plan by its id.")]
+    [ProducesResponseType(typeof(NutritionPlanResource), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> UpdateNutritionPlan(
+        [FromRoute] int nutritionPlanId,
+        [FromBody] UpdateNutritionPlanResource resource,
+        CancellationToken cancellationToken)
+    {
+        var command = UpdateNutritionPlanCommandFromResourceAssembler.ToCommandFromResource(resource, nutritionPlanId);
+
+        var result = await nutritionPlanCommandService.Handle(command, cancellationToken);
+
+        return NutritionActionResultAssembler.ToActionResultFromUpdateNutritionPlanResult(
+            this,
+            result,
+            _errorLocalizer,
+            _problemDetailsFactory,
+            updated => Ok(
+                NutritionPlanResourceFromEntityAssembler.ToResourceFromEntity(updated)));
+    }
+    
     [HttpDelete("{nutritionPlanId:int}")]
     [EndpointSummary("Delete nutrition plan by its id")]
     [EndpointDescription("Delete nutrition plan by its id")]

@@ -3,6 +3,7 @@
 public enum NutritionError
 {
     None,
+    InvalidData,
     NutritionPlanNotFound,
     MealPlanNotFound,
     FoodRecommendationNotFound,

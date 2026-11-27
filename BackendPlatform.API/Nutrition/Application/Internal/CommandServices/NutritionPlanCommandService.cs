@@ -20,6 +20,36 @@ public class NutritionPlanCommandService(INutritionPlanRepository nutritionPlanR
         return Result<NutritionPlan>.Success(nutritionPlan);
     }
     
+    public async Task<Result<NutritionPlan>> Handle(UpdateNutritionPlanCommand command, CancellationToken cancellationToken)
+    {
+        var nutritionPlan = await nutritionPlanRepository.FindTrackedByIdAsync(command.NutritionPlanId, cancellationToken);
+
+        if (nutritionPlan is null)
+            return Result<NutritionPlan>.Failure(
+                NutritionError.NutritionPlanNotFound,
+                "Nutrition plan not found.");
+
+        try
+        {
+            nutritionPlan.UpdateInformation(
+                command.Name,
+                command.Description,
+                command.Objective,
+                command.StartDate,
+                command.EndDate,
+                command.Status);
+
+            await unitOfWork.CompleteAsync(cancellationToken);
+            return Result<NutritionPlan>.Success(nutritionPlan);
+        }
+        catch (ArgumentException exception)
+        {
+            return Result<NutritionPlan>.Failure(
+                NutritionError.InvalidData,
+                exception.Message);
+        }
+    }
+    
     public async Task<Result<bool>> Handle(DeleteNutritionPlanCommand command, CancellationToken cancellationToken)
     {
         var nutritionPlan = await nutritionPlanRepository.FindTrackedByIdAsync(command.NutritionPlanId, cancellationToken);
