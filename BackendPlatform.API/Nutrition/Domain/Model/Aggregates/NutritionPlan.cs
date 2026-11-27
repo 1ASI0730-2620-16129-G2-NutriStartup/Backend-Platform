@@ -8,7 +8,7 @@ namespace BackendPlatform.API.Nutrition.Domain.Model.Aggregates;
 public partial class NutritionPlan : AggregateRoot
 {
     public NutritionPlan(string name, string description, string objective,
-        string startDate, string endDate)
+        string startDate, string endDate, NutritionPlanStatus status = NutritionPlanStatus.Active)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(name);
         ArgumentException.ThrowIfNullOrWhiteSpace(description);
@@ -20,7 +20,7 @@ public partial class NutritionPlan : AggregateRoot
         Objective = objective;
         StartDate = startDate;
         EndDate = endDate;
-        Status = NutritionPlanStatus.Active;
+        Status = status;
         AddDomainEvent(new NutritionPlanCreatedEvent(Id, name, description, objective, startDate, endDate,
             Status.ToString()));
     }
@@ -29,6 +29,11 @@ public partial class NutritionPlan : AggregateRoot
         command.Objective, command.StartDate, command.EndDate)
     {
         
+    }
+
+    public NutritionPlan(SeedNutritionPlansCommand command)
+    {
+        ArgumentNullException.ThrowIfNull(command);
     }
     
     public NutritionPlanId Id { get; }

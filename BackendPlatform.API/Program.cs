@@ -3,6 +3,7 @@ using BackendPlatform.API.Nutrition.Application.CommandServices;
 using BackendPlatform.API.Nutrition.Application.Internal.CommandServices;
 using BackendPlatform.API.Nutrition.Application.Internal.QueryServices;
 using BackendPlatform.API.Nutrition.Application.QueryServices;
+using BackendPlatform.API.Nutrition.Domain.Model.Commands;
 using BackendPlatform.API.Nutrition.Domain.Repositories;
 using BackendPlatform.API.Nutrition.Infrastructure.Persistence.EntityFrameworkCore.Repositories;
 using BackendPlatform.API.Shared.Infrastructure.Persistence.EntityFrameworkCore.Configuration;
@@ -141,6 +142,20 @@ builder.Services.AddScoped<IPatientProfileQueryService, PatientProfileQueryServi
 builder.Services.AddScoped<INutritionistProfileQueryService, NutritionistProfileQueryService>();
 
 var app = builder.Build();
+
+await using (var scope = app.Services.CreateAsyncScope())
+{
+    var nutritionPlanCommandService =
+        scope.ServiceProvider.GetRequiredService<INutritionPlanCommandService>();
+
+    var result = await nutritionPlanCommandService.Handle(
+        new SeedNutritionPlansCommand(),
+        CancellationToken.None);
+
+    if (!result.IsSuccess)
+        throw new InvalidOperationException(
+            $"The Nutrition Plans could not be loaded.: {result.Message}");
+}
 
 using (var scope = app.Services.CreateScope())
 {
