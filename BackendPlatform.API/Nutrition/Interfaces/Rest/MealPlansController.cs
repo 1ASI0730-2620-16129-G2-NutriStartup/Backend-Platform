@@ -78,6 +78,30 @@ public class MealPlansController(
         return Ok(mealPlanResources);
     }
     
+    [HttpPut("{mealPlanId:int}")]
+    [EndpointSummary("Update a meal plan")]
+    [EndpointDescription("Update a meal plan by its id.")]
+    [ProducesResponseType(typeof(MealPlanResource), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> UpdateMealPlan(
+        [FromRoute] int mealPlanId,
+        [FromBody] UpdateMealPlanResource resource,
+        CancellationToken cancellationToken)
+    {
+        var command = UpdateMealPlanCommandFromResourceAssembler.ToCommandFromResource(resource, mealPlanId);
+
+        var result = await mealPlanCommandService.Handle(command, cancellationToken);
+
+        return NutritionActionResultAssembler.ToActionResultFromUpdateMealPlanResult(
+            this,
+            result,
+            _errorLocalizer,
+            _problemDetailsFactory,
+            updated => Ok(
+                MealPlanResourceFromEntityAssembler.ToResourceFromEntity(updated)));
+    }
+    
     [HttpDelete("{mealPlanId:int}")]
     [EndpointSummary("Delete meal plan by its id")]
     [EndpointDescription("Delete meal plan by its id")]

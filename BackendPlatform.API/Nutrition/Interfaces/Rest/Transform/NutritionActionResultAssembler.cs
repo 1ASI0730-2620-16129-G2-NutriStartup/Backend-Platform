@@ -130,6 +130,24 @@ public static class NutritionActionResultAssembler
         return successAction(mealPlans);
     }
     
+    public static IActionResult ToActionResultFromUpdateMealPlanResult(
+        ControllerBase controller,
+        Result<MealPlan> result,
+        IStringLocalizer<ErrorMessages> errorLocalizer,
+        ProblemDetailsFactory problemDetailsFactory,
+        Func<MealPlan, IActionResult> successAction)
+    {
+        if (result.IsSuccess)
+            return successAction(result.Value!);
+
+        var statusCode = ToStatusCodeFromNutritionError((NutritionError)result.Error!);
+        return problemDetailsFactory.CreateProblemDetails(
+            controller,
+            statusCode,
+            result.Error,
+            result.Message);
+    }
+    
     public static IActionResult ToActionResultFromDeleteMealPlanResult(
         ControllerBase controller,
         Result<bool> result,

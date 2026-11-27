@@ -39,13 +39,8 @@ public partial class NutritionPlan : AggregateRoot
     public string EndDate { get; private set; }
     public NutritionPlanStatus Status { get; private set; } = NutritionPlanStatus.Active;
     
-    public void UpdateInformation(
-        string name,
-        string description,
-        string objective,
-        string startDate,
-        string endDate,
-        string status)
+    public void UpdateInformation(string name, string description, string objective, string startDate,
+        string endDate, string status)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(name);
         ArgumentException.ThrowIfNullOrWhiteSpace(description);

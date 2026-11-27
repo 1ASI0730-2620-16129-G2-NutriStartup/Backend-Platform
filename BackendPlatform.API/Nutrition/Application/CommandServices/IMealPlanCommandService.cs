@@ -8,5 +8,7 @@ public interface IMealPlanCommandService
 {
     Task<Result<MealPlan>> Handle(CreateMealPlanCommand command, CancellationToken cancellationToken);
     
+    Task<Result<MealPlan>> Handle(UpdateMealPlanCommand command, CancellationToken cancellationToken);
+    
     Task<Result<bool>> Handle(DeleteMealPlanCommand command, CancellationToken cancellationToken);
 }

@@ -28,6 +28,20 @@ public partial class MealPlan : AggregateRoot
         
     }
     
+    public void UpdateInformation(NutritionPlanId nutritionPlanId, string mealType, string description, int calories)
+    {
+        ArgumentException.ThrowIfNullOrWhiteSpace(mealType);
+        ArgumentException.ThrowIfNullOrWhiteSpace(description);
+
+        if (calories < 0)
+            throw new ArgumentOutOfRangeException(nameof(calories));
+
+        NutritionPlanId = nutritionPlanId;
+        MealType = mealType;
+        Description = description;
+        Calories = calories;
+    }
+    
     public MealPlanId Id { get; }
     public NutritionPlanId NutritionPlanId { get; private set; }
     public string MealType { get; private set; }
