@@ -8,5 +8,7 @@ public interface IFoodRecommendationCommandService
 {
     Task<Result<FoodRecommendation>> Handle(CreateFoodRecommendationCommand command, CancellationToken cancellationToken);
     
+    Task<Result<FoodRecommendation>> Handle(UpdateFoodRecommendationCommand command, CancellationToken cancellationToken);
+    
     Task<Result<bool>> Handle(DeleteFoodRecommendationCommand command, CancellationToken cancellationToken);
 }

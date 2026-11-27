@@ -78,6 +78,30 @@ public class FoodRecommendationsController(
         return Ok(foodRecommendationResources);
     }
     
+    [HttpPut("{foodRecommendationId:int}")]
+    [EndpointSummary("Update a food recommendation")]
+    [EndpointDescription("Update a food recommendation by its id.")]
+    [ProducesResponseType(typeof(FoodRecommendationResource), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> UpdateFoodRecommendation(
+        [FromRoute] int foodRecommendationId,
+        [FromBody] UpdateFoodRecommendationResource resource,
+        CancellationToken cancellationToken)
+    {
+        var command = UpdateFoodRecommendationCommandFromResourceAssembler.ToCommandFromResource(resource, foodRecommendationId);
+
+        var result = await foodRecommendationCommandService.Handle(command, cancellationToken);
+
+        return NutritionActionResultAssembler.ToActionResultFromUpdateFoodRecommendationResult(
+            this,
+            result,
+            _errorLocalizer,
+            _problemDetailsFactory,
+            updated => Ok(
+                FoodRecommendationResourceFromEntityAssembler.ToResourceFromEntity(updated)));
+    }
+    
     [HttpDelete("{foodRecommendationId:int}")]
     [EndpointSummary("Delete food recommendation by its id")]
     [EndpointDescription("Delete food recommendation by its id")]

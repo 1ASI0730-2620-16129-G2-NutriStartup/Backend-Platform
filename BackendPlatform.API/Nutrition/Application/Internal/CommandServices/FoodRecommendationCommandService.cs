@@ -9,7 +9,7 @@ using BackendPlatform.API.Shared.Domain.Repositories;
 namespace BackendPlatform.API.Nutrition.Application.Internal.CommandServices;
 
 public class FoodRecommendationCommandService(IFoodRecommendationRepository foodRecommendationRepository,
-    IUnitOfWork unitOfWork) : IFoodRecommendationCommandService
+    IMealPlanRepository mealPlanRepository, IUnitOfWork unitOfWork) : IFoodRecommendationCommandService
 {
     public async Task<Result<FoodRecommendation>> Handle(CreateFoodRecommendationCommand command, CancellationToken cancellationToken)
     {
@@ -25,6 +25,53 @@ public class FoodRecommendationCommandService(IFoodRecommendationRepository food
                 "The created food recommendation could not be reloaded.");
         
         return Result<FoodRecommendation>.Success(createdFoodRecommendation);
+    }
+    
+    public async Task<Result<FoodRecommendation>> Handle(UpdateFoodRecommendationCommand command, CancellationToken cancellationToken)
+    {
+        var foodRecommendation = await foodRecommendationRepository.FindTrackedByIdAsync(command.FoodRecommendationId, cancellationToken);
+
+        if (foodRecommendation is null)
+            return Result<FoodRecommendation>.Failure(
+                NutritionError.FoodRecommendationNotFound,
+                "Food recommendation not found.");
+
+        var mealPlan = await mealPlanRepository.FindByIdAsNoTrackingAsync(
+            command.MealPlanId,
+            cancellationToken);
+
+        if (mealPlan is null)
+            return Result<FoodRecommendation>.Failure(
+                NutritionError.MealPlanNotFound,
+                "Meal plan not found.");
+
+        try
+        {
+            foodRecommendation.UpdateInformation(
+                command.MealPlanId,
+                command.FoodName,
+                command.Portion,
+                command.NutritionalValue);
+
+            await unitOfWork.CompleteAsync(cancellationToken);
+
+            var updatedRecommendation =
+                await foodRecommendationRepository.FindByIdAsNoTrackingAsync(
+                    command.FoodRecommendationId,
+                    cancellationToken);
+
+            if (updatedRecommendation is null)
+                throw new InvalidOperationException(
+                    "The updated food recommendation could not be reloaded.");
+
+            return Result<FoodRecommendation>.Success(updatedRecommendation);
+        }
+        catch (ArgumentException exception)
+        {
+            return Result<FoodRecommendation>.Failure(
+                NutritionError.InvalidData,
+                exception.Message);
+        }
     }
     
     public async Task<Result<bool>> Handle(DeleteFoodRecommendationCommand command, CancellationToken cancellationToken)

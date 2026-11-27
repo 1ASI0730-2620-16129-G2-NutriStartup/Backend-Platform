@@ -27,6 +27,18 @@ public class FoodRecommendation : AggregateRoot
         
     }
     
+    public void UpdateInformation(MealPlanId mealPlanId, string foodName, string portion, string nutritionalValue)
+    {
+        ArgumentException.ThrowIfNullOrWhiteSpace(foodName);
+        ArgumentException.ThrowIfNullOrWhiteSpace(portion);
+        ArgumentException.ThrowIfNullOrWhiteSpace(nutritionalValue);
+
+        MealPlanId = mealPlanId;
+        FoodName = foodName;
+        Portion = portion;
+        NutritionalValue = nutritionalValue;
+    }
+    
     public FoodRecommendationId Id { get; }
     public MealPlanId MealPlanId { get; private set; }
     public string FoodName { get; private set; }

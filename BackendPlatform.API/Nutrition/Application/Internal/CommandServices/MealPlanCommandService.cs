@@ -27,13 +27,9 @@ public class MealPlanCommandService(IMealPlanRepository mealPlanRepository, INut
         return Result<MealPlan>.Success(createdMealPlan);
     }
     
-    public async Task<Result<MealPlan>> Handle(
-        UpdateMealPlanCommand command,
-        CancellationToken cancellationToken)
+    public async Task<Result<MealPlan>> Handle(UpdateMealPlanCommand command, CancellationToken cancellationToken)
     {
-        var mealPlan = await mealPlanRepository.FindTrackedByIdAsync(
-            command.MealPlanId,
-            cancellationToken);
+        var mealPlan = await mealPlanRepository.FindTrackedByIdAsync(command.MealPlanId, cancellationToken);
 
         if (mealPlan is null)
             return Result<MealPlan>.Failure(
