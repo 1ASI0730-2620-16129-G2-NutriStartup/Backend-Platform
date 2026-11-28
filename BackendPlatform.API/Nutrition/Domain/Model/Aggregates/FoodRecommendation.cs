@@ -26,6 +26,11 @@ public class FoodRecommendation : AggregateRoot
     {
         
     }
+
+    public FoodRecommendation(SeedFoodRecommendationsCommand command)
+    {
+        ArgumentNullException.ThrowIfNull(command);
+    }
     
     public void UpdateInformation(MealPlanId mealPlanId, string foodName, string portion, string nutritionalValue)
     {

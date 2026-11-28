@@ -171,6 +171,20 @@ await using (var scope = app.Services.CreateAsyncScope())
             $"The Meal Plans could not be loaded.: {result.Message}");
 }
 
+await using (var scope = app.Services.CreateAsyncScope())
+{
+    var foodRecommendationCommandService =
+        scope.ServiceProvider.GetRequiredService<IFoodRecommendationCommandService>();
+
+    var result = await foodRecommendationCommandService.Handle(
+        new SeedFoodRecommendationsCommand(),
+        CancellationToken.None);
+
+    if (!result.IsSuccess)
+        throw new InvalidOperationException(
+            $"The Food Recommendations could not be loaded.: {result.Message}");
+}
+
 using (var scope = app.Services.CreateScope())
 {
     var services = scope.ServiceProvider;
