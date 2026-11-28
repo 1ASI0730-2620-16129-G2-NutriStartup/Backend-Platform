@@ -27,6 +27,11 @@ public partial class MealPlan : AggregateRoot
     {
         
     }
+
+    public MealPlan(SeedMealPlansCommand command)
+    {
+        ArgumentNullException.ThrowIfNull(command);
+    }
     
     public void UpdateInformation(NutritionPlanId nutritionPlanId, string mealType, string description, int calories)
     {
